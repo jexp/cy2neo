@@ -1,0 +1,67 @@
+<html>
+<head>
+<link rel="stylesheet" href="styles/vendor.css">
+<link rel="stylesheet" href="styles/alchemy.css">
+<link rel="stylesheet" href="styles/codemirror.css">
+<link rel="stylesheet" href="styles/codemirror-neo.css">
+<link rel="stylesheet" href="styles/cy2neo.css">
+<link rel="shortcut icon" href="a70134cc.alchemyFlatfavicon.ico">
+<title>Cy2Neo - Tiny Neo4j Cypher Workbench</title>
+</head>
+<body>
+  <div>
+  <input class="form-control" type="url" value="http://localhost:7474" id="neo4jUrl"/>
+  <textarea name="cypher" id="cypher" rows="4" cols="120" data-lang="cypher" class="code form-control">
+  MATCH (n)-[r]->(m)
+  RETURN n,r,m
+  LIMIT 50;
+  </textarea>
+  <a href="#" title="Execute" id="execute"><i class="fa fa-play-circle-o"></i></a>
+  </div>
+
+<div class="alchemy tab-pane active" id="graph"></div>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li class="active"><a href="#graph" role="tab" data-toggle="tab">Graph</a></li>
+  <li><a href="#table" role="tab" data-toggle="tab">Table</a></li>
+</ul>
+
+<div class="tab-content">
+  <div class="alchemy tab-pane active" id="graph"></div>
+  <div class="tab-pane" id="table">table</div>
+</div>
+
+<script src="scripts/codemirror.js"></script>
+<script src="scripts/codemirror-cypher.js"></script>
+<script src="scripts/vendor.js"></script>
+<script src="scripts/alchemy.js"></script>
+<script src="scripts/alchemyConfig.js"></script>
+<script src="scripts/neo.js"></script>
+<script src="scripts/cy2neo.js"></script>
+
+<style type="text/css" media="screen">
+/* todo dynamic CSS */
+	.Movie circle {
+        fill: #00ff0e;
+        stroke: #00ffda;
+    }
+
+    .Person circle {
+        fill: #ff7921;
+        stroke: #4f07ff;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+		//todo dynamic configuration
+		config.nodeTypes = { type : ["Movie","Person"]}
+		config.nodeCaption=function(n) {return n.name || n.title;};
+		config.edgeCaption={"caption":["ACTED_IN","DIRECTED","PRODUCED","REVIEWED","WROTE"]};
+		config.nodeMouseOver = function(n) {return n.id + "<br/>"+n.name || n.title;};
+
+		config.neo4jUrl="http://localhost:7474/db/data";
+		new Cy2Neo(config,"graph","cypher","execute", function() { return $("#neo4jUrl").val(); });
+	});
+</script>
+</body>
+</html>
