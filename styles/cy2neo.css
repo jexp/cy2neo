@@ -14,7 +14,7 @@ svg {
 
 #neo4jUrl {
    position:absolute;
-   right: 0px;
+   right: 5px;
    top: 1em;
    z-index: 100;
    width: 20em;
