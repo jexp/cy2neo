@@ -33,18 +33,28 @@ function Neo(urlSource) {
 						var nodes = [];
 						var rels = [];
 						var labels = [];
+					    function findNode(nodes, id) {
+						   for (var i=0;i<nodes.length;i++) {
+						      if (nodes[i].id == id) return i;
+						   }
+						   return -1;
+					    }
 						res.results[0].data.forEach(function(row) {
 							row.graph.nodes.forEach(function(n) {
 							   var found = nodes.filter(function (m) { return m.id == n.id; }).length > 0;
 							   if (!found) {
-								  var node = n.properties||{}; node.id=n.id;node.type=n.labels[0];
-								  nodes.push(node);
-								  if (labels.indexOf(node.type) == -1) labels.push(node.type);
+								  //n.props=n.properties;
+								  for(var p in n.properties||{}) { n[p]=n.properties[p];delete n.properties[p];} 
+								  nodes.push(n);
+								  labels=labels.concat(n.labels.filter(function(l) { labels.indexOf(l) == -1 }))
 							   }
 							});
-							rels = rels.concat(row.graph.relationships.map(function(r) { return { source:r.startNode, target:r.endNode, caption:r.type} }));
+							rels = rels.concat(row.graph.relationships.map(
+								function(r) { 
+								   return { id: r.id, start:r.startNode, end:r.endNode, type:r.type } }
+								));
 						});
-						cb(null,{table:rows,graph:{nodes:nodes, edges:rels},labels:labels});
+						cb(null,{table:rows,graph:{nodes:nodes, links:rels},labels:labels});
 					}
 				}
 			});
