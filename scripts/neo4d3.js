@@ -45,6 +45,7 @@ function Neo(urlSource) {
 							   if (!found) {
 								  //n.props=n.properties;
 								  for(var p in n.properties||{}) { n[p]=n.properties[p];delete n.properties[p];} 
+								  delete n.properties;
 								  nodes.push(n);
 								  labels=labels.concat(n.labels.filter(function(l) { labels.indexOf(l) == -1 }))
 							   }

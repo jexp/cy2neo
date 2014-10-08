@@ -20,8 +20,8 @@ function Neod3Renderer() {
           text-color-internal: #FFFFFF;\
         }\n";
 
-    var skip = ["id", "start", "end", "source", "target", "labels", "type", "selected"];
-    var prio_props = ["name", "title", "tag", "username", "lastname"];
+    var skip = ["id", "start", "end", "source", "target", "labels", "type", "selected","properties"];
+    var prio_props = ["name", "title", "tag", "username", "lastname","caption"];
 
     var serializer = null;
 
