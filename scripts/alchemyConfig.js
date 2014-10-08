@@ -21,7 +21,7 @@ var config = {
   captionToggle: true,
   edgesToggle: true,
   nodesToggle: true,
-  toggleRootNotes: false,
+  toggleRootNodes: false,
 
   zoomControls: true
 };
