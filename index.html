@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="styles/datatable.css">
 <link rel="stylesheet" href="styles/vendor.css"> <!-- bootstrap-->
 <link rel="stylesheet" href="styles/gh-fork-ribbon.css">
+<link rel="stylesheet" href="styles/sweet-alert.css">
 <title>Cy2NeoD3 - Tiny Neo4j Cypher Workbench</title>
 </head>
 <body>
@@ -40,16 +41,10 @@
 
 </div>
 
-<div class="github-fork-ribbon-wrapper right-bottom">
-    <div class="github-fork-ribbon">
-        <a href="https://github.com/jexp/cy2neo">Fork me on GitHub</a>
-    </div>
-</div>
-
-
 <script src="scripts/codemirror.js"></script>
 <script src="scripts/codemirror-cypher.js"></script>
 <script src="scripts/vendor.js"></script>
+<script src="scripts/sweet-alert.min.js"></script>
 <script src="scripts/neod3.js"></script>
 <script src="scripts/neod3-visualization.js"></script>
 <script src="scripts/neo4d3.js"></script>
@@ -58,27 +53,10 @@
 <script src="scripts/cypher.datatable.js"></script>
 
 
-<style type="text/css" media="screen">
-/* todo dynamic CSS */
-	.Movie circle {
-        fill: #00ff0e;
-        stroke: #00ffda;
-    }
-
-    .Person circle {
-        fill: #ff7921;
-        stroke: #4f07ff;
-    }
-    #graph {
-	   width:100%;
-	   height:80%;
-	}
-</style>
 <script type="text/javascript">
     $(document).ready(function() {
 		//todo dynamic configuration
 		var config = {}
-		config.neo4jUrl="http://localhost:7474/db/data";
 		new Cy2NeoD3(config,"graph","datatable","cypher","execute", function() { return $("#neo4jUrl").val(); });
 	});
 </script>
