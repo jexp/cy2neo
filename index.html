@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="styles/codemirror-neo.css">
 <link rel="stylesheet" href="styles/cy2neo.css">
 <link rel="stylesheet" href="styles/neod3.css">
+<link rel="stylesheet" href="styles/datatable.css">
 <link rel="stylesheet" href="styles/vendor.css"> <!-- bootstrap-->
 <link rel="stylesheet" href="styles/gh-fork-ribbon.css">
 <title>Cy2NeoD3 - Tiny Neo4j Cypher Workbench</title>
@@ -19,7 +20,25 @@
   <a href="#" title="Execute" id="execute"><i class="fa fa-play-circle-o"></i></a>
   </div>
 
-<div class="tab-pane active" id="graph">&nbsp;</div>
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#graph" aria-controls="home" role="tab" data-toggle="tab">Graph</a></li>
+    <li role="presentation"><a href="#table" aria-controls="table" role="tab" data-toggle="tab">Table</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="graph">
+    	<div class="tab-pane active" id="graph">&nbsp;</div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="table">
+    	<div id="datatable"></div>
+    </div>
+  </div>
+
+</div>
 
 <div class="github-fork-ribbon-wrapper right-bottom">
     <div class="github-fork-ribbon">
@@ -35,6 +54,9 @@
 <script src="scripts/neod3-visualization.js"></script>
 <script src="scripts/neo4d3.js"></script>
 <script src="scripts/cy2neod3.js"></script>
+<script src="scripts/jquery.dataTables.min.js"></script>
+<script src="scripts/cypher.datatable.js"></script>
+
 
 <style type="text/css" media="screen">
 /* todo dynamic CSS */
@@ -57,7 +79,7 @@
 		//todo dynamic configuration
 		var config = {}
 		config.neo4jUrl="http://localhost:7474/db/data";
-		new Cy2NeoD3(config,"graph","cypher","execute", function() { return $("#neo4jUrl").val(); });
+		new Cy2NeoD3(config,"graph","datatable","cypher","execute", function() { return $("#neo4jUrl").val(); });
 	});
 </script>
 </body>

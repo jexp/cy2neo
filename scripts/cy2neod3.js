@@ -1,4 +1,4 @@
-function Cy2NeoD3(config, graphId, sourceId, execId, urlSource) {
+function Cy2NeoD3(config, graphId, tableId,sourceId, execId, urlSource) {
     function createEditor() {
 		return CodeMirror.fromTextArea(document.getElementById(sourceId), {
 		  parserfile: ["codemirror-cypher.js"],
@@ -25,6 +25,7 @@ function Cy2NeoD3(config, graphId, sourceId, execId, urlSource) {
 					var c=$("#"+graphId);
 					c.empty();
 					neod3.render(graphId, c ,graph);
+					renderResult(tableId, res.table);
 				}
 			});
 		} catch(e) {

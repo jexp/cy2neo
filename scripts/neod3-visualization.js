@@ -166,7 +166,7 @@ function Neod3Renderer() {
             'stroke-width' : '0',
             'stroke-color' : 'black',
             'fill' : 'black',
-            'x' : 30.2*r,
+            'x' : 3.2*r,
             'font-size' : "12px"
           });
           text.text(function(node) {
