@@ -84,30 +84,32 @@ function Neod3Renderer() {
             }
             return style;
         }
-
         function style_sheet(styles, styleContents) {
-            var styleItems = [];
+            function format(key) {
+                var item=styles[key];
+                return item.selector +
+                    " {caption: '{" + item.caption +
+                    "}'; color: " + item.color +
+                    "; border-color: " + item['border-color'] +
+                    "; text-color-internal: " +  item['text-color-internal'] +
+                    "; text-color-external: " +  item['text-color-external'] +
+                    "; }"
+            }
+            return styleContents + Object.keys(styles).map(format).join("\n");
+        }
+        function create_styles(styleCaptions,  styles) {
             var colors = neo.style.defaults.colors;
-            for (var selector in styles) {
-                var styleItem;
-                if (selector in existingStyles) {
-                    styleItem = existingStyles[selector];
-                } else {
+            for (var selector in styleCaptions) {
+                if (!(selector in styles)) {
                     var color = colors[currentColor];
                     currentColor = (currentColor + 1) % colors.length;
                     var textColor = window.isInternetExplorer ? '#000000' : color['text-color-internal'];
-                    styleItem = selector +
-                        " {caption: '{" + styles[selector] +
-                        "}'; color: " + color.color +
-                        "; border-color: " + color['border-color'] +
-                        "; text-color-internal: " +  textColor +
-                        "; text-color-external: " +  textColor +
-                        "; }";
-                    existingStyles[selector] = styleItem;
+                    var style = {selector:selector, caption:styleCaptions[selector], color:color.color, 
+                         "border-color":color['border-color'], "text-color-internal":textColor,"text-color-external": textColor }
+                    styles[selector] = style;
                 }
-                styleItems.push(styleItem);
             }
-            return styleContents + styleItems.join("\n");
+            return styles;
         }
 
         function applyZoom() {
@@ -135,6 +137,54 @@ function Neod3Renderer() {
             renderer.on("touchend.zoom",null);
         }
 
+        function legend(svg, styles) {
+          var keys = Object.keys(styles).sort();
+          var circles = svg.selectAll('circle.legend').data(keys);
+          var r=20;
+          circles.enter().append('circle').classed('legend', true).attr({
+            cx: 2*r,
+            r : r
+          });
+          circles.attr({
+            cy: function(node) {
+              return (keys.indexOf(node)+1)*2.2*r;
+            },
+            fill: function(node) {
+              return styles[node]['color'];
+            },
+            stroke: function(node) {
+              return styles[node]['border-color'];
+            },
+            'stroke-width': function(node) {
+              return "2px";
+            }
+          });
+          var text = svg.selectAll('text.legend').data(keys);
+          text.enter().append('text').classed('legend',true).attr({
+            'text-anchor': 'left',
+            'font-weight': 'bold',
+            'stroke-width' : '0',
+            'stroke-color' : 'black',
+            'fill' : 'black',
+            'x' : 30.2*r,
+            'font-size' : "12px"
+          });
+          text.text(function(node) {
+            var label = styles[node].selector;
+            return label ? label.substring(5) : "";
+          }).attr('y', function(node) {
+              return (keys.indexOf(node)+1)*2.2*r+6;
+          })
+/*
+          .attr('stroke', function(node) {
+            return styles[node]['color'];
+          })
+         .attr('fill', function(node) {
+              return styles[node]['text-color-internal'];
+          });
+*/
+          return circles.exit().remove();
+        }
         function keyHandler() {
             if (d3.event.altKey || d3.event.shiftKey) {
                 enableZoomHandlers();
@@ -152,15 +202,17 @@ function Neod3Renderer() {
            //  links[i].properties = props(links[i]);
         }
         var nodeStyles = node_styles(nodes);
-        var styleSheet = style_sheet(nodeStyles, styleContents);
-
+        create_styles(nodeStyles, existingStyles);
+        var styleSheet = style_sheet(existingStyles, styleContents);
         var graphModel = neo.graphModel()
             .nodes(nodes)
             .relationships(links);
         var graphView = neo.graphView()
             .style(styleSheet)
             .width($container.width()).height($container.height()).on('nodeClicked', dummyFunc).on('relationshipClicked', dummyFunc).on('nodeDblClicked', dummyFunc);
-        var renderer = d3.select("#" + id).append("svg").data([graphModel]);
+        var svg = d3.select("#" + id).append("svg");
+        var renderer = svg.data([graphModel]);
+        legend(svg,existingStyles);
         var zoomHandlers = {};
         var zoomBehavior = d3.behavior.zoom().on("zoom", applyZoom).scaleExtent([0.2, 8]);
 
