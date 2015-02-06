@@ -57,7 +57,7 @@
     $(document).ready(function() {
 		//todo dynamic configuration
 		var config = {}
-		new Cy2NeoD3(config,"graph","datatable","cypher","execute", function() { return $("#neo4jUrl").val(); });
+		new Cy2NeoD3(config,"graph","datatable","cypher","execute", function() { return $("#neo4jUrl").val(); }, true);
 	});
 </script>
 </body>
