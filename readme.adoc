@@ -2,16 +2,16 @@
 
 Cy2Neo is a tiny *Neo4j query console*, in a single HTML-page using client-side JavaScript only.
 
-http://neo4j.org[Neo4j] is an open source graph database and http://neo4j.org/learn/cypher[Cypher] is Neo4j's graph query language.
+http://neo4j.com/developer[Neo4j] is an open source graph database and http://neo4j.com/developer/cypher[Cypher] is Neo4j's graph query language.
 
 Cypher queries are highlighted with http://codemirror.net/[CodeMirror].
 
-Graph query results are rendered with http://graphalchemist.github.io/Alchemy[Alchemy.js] by http://graphalchemist.com[GraphAlchemist, PDX] for graph rendering.
+Graph query results are rendered with https://d3js.org/[D3] using a custom renderer based on neo4j's browser rendering that is https://github.com/jexp/cy2neo/blob/neod3/scripts/neod3.js[part of this project].
 
-Cy2Neo uses a simple Neo4j connector that posts Cypher queries to Neo4j's transactional http://docs.neo4j.org/chunked/milestone/rest-api-transactional.html[Cypher HTTP endpoint] using jQuery Ajax requests.
+Cy2Neo uses a simple Neo4j HTTP-connector that posts Cypher queries to Neo4j's transactional http://neo4j.com/docs/developer-manual/current/#rest-api-transactional[Cypher HTTP endpoint] using jQuery Ajax requests.
 
-You can http://jexp.github.io/cy2neo[try it live here], it should be able to connect to any Neo4j 2.x instance that's accessible from your machine.
-Just enter the Neo4j-URL in the box on the right side.
+You can http://jexp.github.io/cy2neo[try it live here], it should be able to connect to any Neo4j 2.x and 3.x instance that's accessible from your machine.
+Just enter the Neo4j-URL, username and password in the boxes on the right side.
 
 [NOTE]
-I wrote most of it while flying from OSCON @ Portland,OR to Chicago on my way home to Dresden, Germany.
+I wrote most of it while flying from OSCON 2014 in Portland,OR to Chicago on my way home to Dresden, Germany.
