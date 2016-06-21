@@ -21,3 +21,19 @@ svg {
    z-index: 100;
    width: 20em;
 }
+
+#neo4jUser {
+   position:absolute;
+   right: 9em;
+   top: 4em;
+   z-index: 100;
+   width: 8em;
+}
+
+#neo4jPass {
+   position:absolute;
+   right: 5px;
+   top: 4em;
+   z-index: 100;
+   width: 8em;
+}
