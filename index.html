@@ -10,16 +10,30 @@
 <link rel="stylesheet" href="styles/gh-fork-ribbon.css">
 <title>Cy2NeoD3 - Tiny Neo4j Cypher Workbench</title>
 </head>
+<script>
+function makeCy(){
+document.getElementById("cypher").value='match (n) where n.label STARTS WITH "'+document.getElementById("term").value+'" return n';
+//alert (document.getElementById("cypher").value);
+}
+
+function parIt(id){
+	var url_string = window.location.href;
+    var url = new URL(url_string);
+    var val = url.searchParams.get(id);
+	document.getElementById(id).value=val;
+}
+
+</script>
 <body>
   <div>
-  <input class="form-control" type="url" value="http://localhost:7474" id="neo4jUrl"/><br/>
-  <input class="form-control" type="text" size="8" value="neo4j" id="neo4jUser"/>
-  <input class="form-control" type="password" size="8" placeholder="password" value="test" id="neo4jPass"/><br/>
+  <input class="form-control" type="hidden" value="http://ns527777.ip-149-56-18.net:7474" id="neo4jUrl"/><br/>
+  <input class="form-control" type="hidden" size="8" value="neo4j" id="neo4jUser"/>
+  <input class="form-control" type="hidden" size="8" placeholder="password" value="test" id="neo4jPass"/><br/>
+  
   <textarea name="cypher" id="cypher" rows="4" cols="120" data-lang="cypher" class="code form-control">
-  MATCH (n)-[r]->(m)
-  RETURN n,r,m
-  LIMIT 50;
   </textarea>
+  
+  <input class="form-control" type="hidden" name="term" id="term" size="60" onKeyPress="makeCy();" onKeyUp="makeCy();">
   <a href="#" title="Execute" id="execute"><i class="fa fa-play-circle-o"></i></a>
   </div>
 
@@ -39,14 +53,7 @@
     <div role="tabpanel" class="tab-pane" id="table">
     	<div id="datatable"></div>
     </div>
-  </div>
-
-  <div class="github-fork-ribbon-wrapper right-bottom">
-      <div class="github-fork-ribbon">
-          <a href="https://github.com/jexp/cy2neo">Fork me on GitHub</a>
-      </div>
-  </div>
-
+  </div>  
 </div>
 
 <script src="scripts/codemirror.js"></script>
@@ -64,7 +71,12 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-		//todo dynamic configuration
+	
+	parIt("term");
+	makeCy();
+	//parIt("cypher");
+	//parIt("neo4jUrl");
+	//todo dynamic configuration
 		var config = {}
 	    var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
 		new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
