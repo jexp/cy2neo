@@ -43,6 +43,34 @@ function Neod3Renderer() {
     var existingStyles = {};
     var currentColor = 1;
 
+    function placeDiv(x_pos, y_pos) {
+        var d = document.getElementById('syn');
+        d.style.position = "absolute";
+        d.style.left = x_pos+'px';
+        d.style.top = y_pos+'px';
+    }
+
+    function nodeClickedHandler(node){
+        var result = "";
+        var synonym = $.parseJSON(JSON.stringify(node))["synonym"];
+        var exactSynonym=$.parseJSON(JSON.stringify(node))["http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"];
+        if (synonym!=null){
+            result = result + "<br>" + synonym;
+            //alert (synonym);
+        }
+        if (exactSynonym!=null){
+            result = result + "<br>" + synonym;
+            //alert (exactSynonym);
+        }
+        document.getElementById("syn").innerHTML = result;
+        document.getElementById("syn").style = "display:block";
+        console.log(document.getElementById("syn"));
+        alert (node.clientX);
+        //alert(result);
+        
+
+    }
+
     function dummyFunc() {
     }
 
@@ -207,7 +235,7 @@ function Neod3Renderer() {
             .relationships(links);
         var graphView = neo.graphView()
             .style(styleSheet)
-            .width($container.width()).height($container.height()).on('nodeClicked', dummyFunc).on('relationshipClicked', dummyFunc).on('nodeDblClicked', dummyFunc);
+            .width($container.width()).height($container.height()).on('nodeClicked', nodeClickedHandler).on('relationshipClicked', dummyFunc).on('nodeDblClicked', dummyFunc);
         var svg = d3.select("#" + id).append("svg");
         var renderer = svg.data([graphModel]);
         legend(svg,existingStyles);
