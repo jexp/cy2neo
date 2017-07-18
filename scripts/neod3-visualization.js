@@ -70,7 +70,8 @@ function Neod3Renderer() {
     function nodeClickedHandler(node){
         var result = "";
         var synonym = $.parseJSON(JSON.stringify(node))["synonym"];
-        var exactSynonym=$.parseJSON(JSON.stringify(node))["http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"];
+        var exactSynonym = $.parseJSON(JSON.stringify(node))["http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"];
+        var diBSVEExactSynonym = $.parseJSON(JSON.stringify(node))["http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym"];
         if (synonym!=null){
             if (synonym.constructor === Array) {
                 for (var i = 0; i < synonym.length; i++){
@@ -118,6 +119,31 @@ function Neod3Renderer() {
                     }
                     else {
                         result = result + "<br>" + exactSynonym;
+                    }
+                }
+            }
+            //alert (exactSynonym);
+        }
+        if (diBSVEExactSynonym!=null){
+            if (diBSVEExactSynonym.constructor === Array){
+                for (var i = 0; i < diBSVEExactSynonym.length; i++){
+                    if (result.indexOf(diBSVEExactSynonym[i])==-1){
+                            if (result===""){
+                                result = diBSVEExactSynonym[i];
+                            }
+                            else {
+                                result = result + "<br>" + diBSVEExactSynonym[i];
+                            }
+                    }
+                }
+            }
+            else {
+                if (result.indexOf(diBSVEExactSynonym)==-1){
+                    if (result===""){
+                        result = diBSVEExactSynonym;
+                    }
+                    else {
+                        result = result + "<br>" + diBSVEExactSynonym;
                     }
                 }
             }
