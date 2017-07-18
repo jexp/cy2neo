@@ -12,7 +12,9 @@
 </head>
 <script>
 function makeCy(){
-document.getElementById("cypher").value='match (n)-[r]->(m) where n.label CONTAINS "'+document.getElementById("term").value+'" return (n)-[r]->(m) limit 50';
+  var queryTerm = document.getElementById("term").value;
+  document.getElementById("cypher").value='match (n)-[r:subClassOf|`http://purl.obolibrary.org/obo/doid#has_material_basis_in`]->(m) where m.label = "'+queryTerm+'" OR n.label = "'+queryTerm+'" OR ANY (item IN n.`http://www.geneontology.org/formats/oboInOwl#hasExactSynonym` WHERE item="' + queryTerm + '") OR ANY (item IN n.`http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym` WHERE item="' + queryTerm + '") OR ANY (item IN n.synonym WHERE item="' + queryTerm + '") or ANY (item IN m.`http://www.geneontology.org/formats/oboInOwl#hasExactSynonym` WHERE item="' + queryTerm + '") OR ANY (item IN m.`http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym` WHERE item="' + queryTerm + '") OR ANY (item IN m.synonym WHERE item="' + queryTerm + '")  return (n)-[r]->(m) limit 50';
+  //document.getElementById("cypher").value='match (n)-[r]->(m) where n.label CONTAINS "'+document.getElementById("term").value+'" return (n)-[r]->(m) limit 50';
 //alert (document.getElementById("cypher").value);
 }
 
