@@ -68,6 +68,7 @@ function Neod3Renderer() {
     }
 
     function nodeClickedHandler(node){
+        var resultAssocArray = {};
         var result = "";
         var synonym = $.parseJSON(JSON.stringify(node))["synonym"];
         var exactSynonym = $.parseJSON(JSON.stringify(node))["http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"];
@@ -75,26 +76,14 @@ function Neod3Renderer() {
         if (synonym!=null){
             if (synonym.constructor === Array) {
                 for (var i = 0; i < synonym.length; i++){
-                    if (result.indexOf(synonym[i])==-1){
-                        if (result===""){
-                            result=synonym[i];
-                        }
-                        else {
-                            result = result + "<br>" + synonym[i];
-                        }
-                    }
+                    resultAssocArray[synonym[i]]=synonym[i];
+                    
                 }
 
             }
             else{
-                if (result.indexOf(synonym)==-1){
-                    if (result===""){
-                        result = synonym;
-                    }
-                    else {
-                        result = result + "<br>" + synonym;
-                    }
-                }
+                resultAssocArray[synonym]=synonym
+                
             }
             
             //alert (synonym);
@@ -102,52 +91,35 @@ function Neod3Renderer() {
         if (exactSynonym!=null){
             if (exactSynonym.constructor === Array){
                 for (var i = 0; i < exactSynonym.length; i++){
-                    if (result.indexOf(exactSynonym[i])==-1){
-                            if (result===""){
-                                result = exactSynonym[i];
-                            }
-                            else {
-                                result = result + "<br>" + exactSynonym[i];
-                            }
-                    }
+                    
+                        resultAssocArray[exactSynonym[i]] = exactSynonym[i];
+                            
+                    
                 }
             }
             else {
-                if (result.indexOf(exactSynonym)==-1){
-                    if (result===""){
-                        result = exactSynonym;
-                    }
-                    else {
-                        result = result + "<br>" + exactSynonym;
-                    }
-                }
+                resultAssocArray[exactSynonym] = exactSynonym;
             }
             //alert (exactSynonym);
         }
         if (diBSVEExactSynonym!=null){
             if (diBSVEExactSynonym.constructor === Array){
                 for (var i = 0; i < diBSVEExactSynonym.length; i++){
-                    if (result.indexOf(diBSVEExactSynonym[i])==-1){
-                            if (result===""){
-                                result = diBSVEExactSynonym[i];
-                            }
-                            else {
-                                result = result + "<br>" + diBSVEExactSynonym[i];
-                            }
-                    }
+                    resultAssocArray[diBSVEExactSynonym[i]] = diBSVEExactSynonym[i];
                 }
             }
             else {
-                if (result.indexOf(diBSVEExactSynonym)==-1){
-                    if (result===""){
-                        result = diBSVEExactSynonym;
-                    }
-                    else {
-                        result = result + "<br>" + diBSVEExactSynonym;
-                    }
-                }
+                resultAssocArray[diBSVEExactSynonym] = diBSVEExactSynonym;
             }
             //alert (exactSynonym);
+        }
+        for (var key in resultAssocArray){
+            if (result === "") {
+                result = resultAssocArray [key];
+            }
+            else {
+                result = result + "<br>" + resultAssocArray [key];
+            }
         }
         document.getElementById("syn").innerHTML = result;
         document.getElementById("syn").style = "display:block";

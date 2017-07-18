@@ -12,7 +12,7 @@
 </head>
 <script>
 function makeCy(){
-document.getElementById("cypher").value='match (n)-[r]->(m) where n.label STARTS WITH "'+document.getElementById("term").value+'" return (n)-[r]->(m) limit 50';
+document.getElementById("cypher").value='match (n)-[r]->(m) where n.label CONTAINS "'+document.getElementById("term").value+'" return (n)-[r]->(m) limit 50';
 //alert (document.getElementById("cypher").value);
 }
 
