@@ -1,5 +1,10 @@
 function Neod3Renderer() {
-
+    var mouseXpos;
+    var mouseYpos;
+    onclick = function(e){
+        mouseXpos = e.clientX;
+        mouseYpos = e.clientY;
+    }
     var styleContents =
         "node {\
           diameter: 40px;\
@@ -21,7 +26,7 @@ function Neod3Renderer() {
         }\n";
 
     var skip = ["id", "start", "end", "source", "target", "labels", "type", "selected","properties"];
-    var prio_props = ["iri", "comment", "name", "title", "tag", "username", "lastname","caption"];
+    var prio_props = ["label",  "comment", "iri", "name", "title", "tag", "username", "lastname","caption"];
 
     var serializer = null;
 
@@ -43,11 +48,23 @@ function Neod3Renderer() {
     var existingStyles = {};
     var currentColor = 1;
 
-    function placeDiv(x_pos, y_pos) {
+    function placeDiv(x, y, syn) {
         var d = document.getElementById('syn');
-        d.style.position = "absolute";
-        d.style.left = x_pos+'px';
-        d.style.top = y_pos+'px';
+        if (syn !=='') { 
+            d.style.position = "absolute";
+            d.style.left = x+'px';
+            d.style.top = y+'px';
+            d.style.display = 'block';
+            d.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            //d.style.width='250px';
+            d.style.font='10px Georgia, Arial';
+            d.style.border="thin solid #AAAAAA";
+            d.style.padding ="2px 2px 2px 2px";
+            d.style.boxShadow = "2px 2px 2px #999999";
+            d.innerHTML = syn;
+        } else {
+            d.style='display:none;';
+        }
     }
 
     function nodeClickedHandler(node){
@@ -55,20 +72,60 @@ function Neod3Renderer() {
         var synonym = $.parseJSON(JSON.stringify(node))["synonym"];
         var exactSynonym=$.parseJSON(JSON.stringify(node))["http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"];
         if (synonym!=null){
-            result = result + "<br>" + synonym;
+            if (synonym.constructor === Array) {
+                for (var i = 0; i < synonym.length; i++){
+                    if (result.indexOf(synonym[i])==-1){
+                        if (result===""){
+                            result=synonym[i];
+                        }
+                        else {
+                            result = result + "<br>" + synonym[i];
+                        }
+                    }
+                }
+
+            }
+            else{
+                if (result.indexOf(synonym)==-1){
+                    if (result===""){
+                        result = synonym;
+                    }
+                    else {
+                        result = result + "<br>" + synonym;
+                    }
+                }
+            }
+            
             //alert (synonym);
         }
         if (exactSynonym!=null){
-            result = result + "<br>" + synonym;
+            if (exactSynonym.constructor === Array){
+                for (var i = 0; i < exactSynonym.length; i++){
+                    if (result.indexOf(exactSynonym[i])==-1){
+                            if (result===""){
+                                result = exactSynonym[i];
+                            }
+                            else {
+                                result = result + "<br>" + exactSynonym[i];
+                            }
+                    }
+                }
+            }
+            else {
+                if (result.indexOf(exactSynonym)==-1){
+                    if (result===""){
+                        result = exactSynonym;
+                    }
+                    else {
+                        result = result + "<br>" + exactSynonym;
+                    }
+                }
+            }
             //alert (exactSynonym);
         }
         document.getElementById("syn").innerHTML = result;
         document.getElementById("syn").style = "display:block";
-        console.log(document.getElementById("syn"));
-        alert (node.clientX);
-        //alert(result);
-        
-
+        placeDiv(mouseXpos, mouseYpos, result);
     }
 
     function dummyFunc() {

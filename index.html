@@ -34,7 +34,7 @@ function parIt(id){
   </textarea>
   
   <input class="form-control" type="hidden" name="term" id="term" size="60" onKeyPress="makeCy();" onKeyUp="makeCy();">
-  <a href="#" title="Execute" id="execute"><i class="fa fa-play-circle-o"></i></a>
+  <a href="#" title="Execute" id="execute" style="display:none"><i class="fa fa-play-circle-o"></i></a>
   </div>
 
 <div role="tabpanel">
@@ -82,6 +82,6 @@ function parIt(id){
 		new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
 	});
 </script>
-<div id="syn" style="display:block; background: rgba(0, 0, 0, 0.5);"> </div>
+<div id="syn" style="display:none; background-color:rgba(250, 250, 250, 0.9);" onClick="this.style='display:none;'"> </div>
 </body>
 </html>
