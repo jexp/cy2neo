@@ -13,7 +13,7 @@ function Neod3Renderer() {
           border-width: 2px;\
           text-color-internal: #000000;\
           text-color-external: #000000;\
-          caption: '{name}';\
+          caption: '{label}';\
           font-size: 12px;\
         }\
         relationship {\
