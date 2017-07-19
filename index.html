@@ -18,11 +18,14 @@ function makeCy(){
 //alert (document.getElementById("cypher").value);
 }
 
-function parIt(id){
-	var url_string = window.location.href;
-    var url = new URL(url_string);
-    var val = url.searchParams.get(id);
-	document.getElementById(id).value=val;
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 </script>
@@ -74,7 +77,7 @@ function parIt(id){
 <script type="text/javascript">
     $(document).ready(function() {
 	
-	parIt("term");
+	document.getElementById("term").value=getParameterByName("term");
 	makeCy();
 	//parIt("cypher");
 	//parIt("neo4jUrl");
