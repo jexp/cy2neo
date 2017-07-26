@@ -154,7 +154,7 @@ function Neod3Renderer() {
                 if (props.hasOwnProperty("http://www.w3.org/2000/01/rdf-schema#label")){
                     props.rdflabel=props["http://www.w3.org/2000/01/rdf-schema#label"];
                 }
-                else {
+                else if (props.hasOwnProperty("http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel")) {
                     props.rdflabel=props["http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel"];
                 }
                 var keys = Object.keys(props);
