@@ -23,7 +23,7 @@ function runScript(e) {
 
 function makeCy(){
   var queryTerm = document.getElementById("term").value;
-  document.getElementById("cypher").value='match (n)-[r:subClassOf|isDefinedBy|`http://purl.obolibrary.org/obo/doid#has_material_basis_in`]->(m) where m.`http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel` =~ "(?i)'+queryTerm+'" OR n.`http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel` =~ "(?i)'+queryTerm+'" OR m.`http://www.w3.org/2000/01/rdf-schema#label` =~ "(?i)'+queryTerm+'" OR n.`http://www.w3.org/2000/01/rdf-schema#label` =~ "(?i)'+queryTerm+'" OR ANY (item IN n.`http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym` WHERE item=~"(?i)' + queryTerm + '") OR ANY (item IN m.`http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym` WHERE item=~"(?i)' + queryTerm + '") return (n)-[r]->(m) limit 50';
+  document.getElementById("cypher").value=queryTerm;
   //document.getElementById("cypher").value='match (n)-[r:subClassOf|`http://purl.obolibrary.org/obo/doid#has_material_basis_in`]->(m) where m.label =~ "(?i)'+queryTerm+'" OR n.label =~ "(?i)'+queryTerm+'" OR ANY (item IN n.`http://www.geneontology.org/formats/oboInOwl#hasExactSynonym` WHERE item=~"(?i)' + queryTerm + '") OR ANY (item IN n.`http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym` WHERE item=~"(?i)' + queryTerm + '") OR ANY (item IN n.synonym WHERE item=~"(?i)' + queryTerm + '") or ANY (item IN m.`http://www.geneontology.org/formats/oboInOwl#hasExactSynonym` WHERE item=~"(?i)' + queryTerm + '") OR ANY (item IN m.`http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym` WHERE item=~"(?i)' + queryTerm + '") OR ANY (item IN m.synonym WHERE item=~"(?i)' + queryTerm + '")  return (n)-[r]->(m) limit 50';
   //document.getElementById("cypher").value='match (n)-[r]->(m) where n.label CONTAINS "'+document.getElementById("term").value+'" return (n)-[r]->(m) limit 50';
 //alert (document.getElementById("cypher").value);
@@ -43,7 +43,7 @@ function getParameterByName(name, url) {
 <body>
   <div>
   <form>
-  <input class="form-control" type="hidden" value="https://ontology-neo4j.bsvecosystem.net/db/data/transaction" id="neo4jUrl"/><br/>
+  <input class="form-control" type="hidden" value="http://10.33.36.143:8081/DIOntoManager" id="neo4jUrl"/><br/>
   <input class="form-control" type="hidden" size="8" value="neo4j" id="neo4jUser"/>
   <input class="form-control" type="hidden" size="8" placeholder="password" value="test" id="neo4jPass"/><br/>
   
