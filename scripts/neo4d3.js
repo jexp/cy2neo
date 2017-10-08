@@ -9,7 +9,9 @@ function Neo(urlSource) {
 			var connection = urlSource();
 			$.ajax(txUrl()+query, {
 				type: "GET",
-				
+				xhrFields: {
+    				withCredentials: true
+				},
 				contentType: "application/json",
 				error: function(err) {
 					cb(err);
