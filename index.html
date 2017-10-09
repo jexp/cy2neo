@@ -108,6 +108,18 @@ function getParameterByName(name, url) {
       //parIt("cypher");
       //parIt("neo4jUrl");
       //todo dynamic configuration
+      $.ajax({
+        url: 'http://10.33.36.143:8081/DIOntoManager/api/user/authenticate',
+        type: 'GET',
+        xhrFields: {
+          withCredentials: true
+        },
+        success: function(data){
+          $('#diAPILoginForm').hide();
+          $('.authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
+          $('.authStatus').show();
+        }
+      })
       var config = {}
       var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
       new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
