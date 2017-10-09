@@ -10,8 +10,9 @@
   <link rel="stylesheet" href="styles/gh-fork-ribbon.css">
   <title>Cy2NeoD3 - Tiny Neo4j Cypher Workbench</title>
 </head>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 <script>
-
+  var apiServer="http://10.33.36.143:8081";
   function runScript(e) {
     if (e.keyCode == 13) {
       var config = {}
@@ -51,6 +52,10 @@ function getParameterByName(name, url) {
         </div>
       </form>
       <div class="authStatus">
+      </div>
+    </div>
+    <div class="modifyNode">
+      <div id="jsGrid">
       </div>
     </div>
   </div>  
@@ -109,7 +114,7 @@ function getParameterByName(name, url) {
       //parIt("neo4jUrl");
       //todo dynamic configuration
       $.ajax({
-        url: 'http://10.33.36.143:8081/DIOntoManager/api/user/authenticate',
+        url: apiServer+'/DIOntoManager/api/user/authenticate',
         type: 'GET',
         xhrFields: {
           withCredentials: true
@@ -127,7 +132,7 @@ function getParameterByName(name, url) {
 
     function logout(){
       $.ajax({
-        url: 'http://10.33.36.143:8081/DIOntoManager/api/user/logout',
+        url: apiServer+'/DIOntoManager/api/user/logout',
         type: 'GET',
         xhrFields: {
           withCredentials: true
@@ -147,14 +152,14 @@ function getParameterByName(name, url) {
 
     $("#diAPILoginForm").submit(function(e){
       $.ajax({
-        url: 'http://10.33.36.143:8081/DIOntoManager/api/user/login',
+        url: apiServer+'/DIOntoManager/api/user/login',
         type: 'POST',
         data: $('#diAPILoginForm').serialize(),
         xhrFields: {
           withCredentials: true
         },
         success: function(data){
-          var inCorrectCredentials = "Incorrect Usename or Password";
+          var inCorrectCredentials = "Incorrect Username or Password";
           if(data.trim() === inCorrectCredentials){
             alert(data);
           }
