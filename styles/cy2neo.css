@@ -35,6 +35,11 @@ svg {
    right:0;
 }
 
+.authStatus{
+   position:relative;
+   left:10px;
+}
+
 .CodeMirror, .CodeMirror-scroll {
   height:auto;
 }

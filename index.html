@@ -113,6 +113,26 @@ function getParameterByName(name, url) {
       new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
     });
 
+    function logout(){
+      $.ajax({
+        url: 'http://10.33.36.143:8081/DIOntoManager/api/user/logout',
+        type: 'GET',
+        xhrFields: {
+          withCredentials: true
+        },
+        success: function(data){
+          alert(data);
+          $('.authStatus').hide();
+          $('#diAPILoginForm').show();
+
+        },
+
+        error: function(err) {
+          alert (err.status)
+        }
+      })
+    };
+
     $("#diAPILoginForm").submit(function(e){
       $.ajax({
         url: 'http://10.33.36.143:8081/DIOntoManager/api/user/login',
@@ -129,7 +149,8 @@ function getParameterByName(name, url) {
           else {
             
             $('#diAPILoginForm').hide();
-            $('.authStatus').html("<font size=\"1\">" + data + "( <p id=\"logout\">logout</p>)</font>");
+            $('.authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
+            $('.authStatus').show();
           }
         },
         error: function(err) {
