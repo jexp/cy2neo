@@ -41,23 +41,20 @@ function getParameterByName(name, url) {
 
 </script>
 <body>
-  <ontomanage>
-    <authentication>
-      <form action="http://10.33.36.143:8081/DIOntoManager/api/user/login" method="post">
-        <username>
-
-          <font size="1">Username:<input type="text" name="username" ></font>
-        </username>
-        <password>
-          <font size="1">Password:<input type="password" name="password" ></font>
-        </password>
-        <submit>
+  <div class="ontomanage">
+    <div class="authentication">
+      <form id="diAPILoginForm" method="post">
+        <div id="credentials">
+          <font size="1">Username:<input type="text" name="username" id="diAPIUsername" ></font>
+          <font size="1">Password:<input type="password" name="password" id="diAPIPassword" ></font>
           <font size="1"><input type="submit" value="Submit"></font>
-        </submit>
+        </div>
       </form>
-    </authentication>
-  </ontomanage>  
-  <ontodisplay>
+      <div class="authStatus">
+      </div>
+    </div>
+  </div>  
+  <div class="ontodisplay">
     <div>
       <form>
         <input class="form-control" type="hidden" value="http://10.33.36.143:8081/DIOntoManager" id="neo4jUrl"/><br/>
@@ -106,18 +103,40 @@ function getParameterByName(name, url) {
 
    <script type="text/javascript">
     $(document).ready(function() {
+      document.getElementById("term").value=getParameterByName("term");
+      makeCy();
+      //parIt("cypher");
+      //parIt("neo4jUrl");
+      //todo dynamic configuration
+      var config = {}
+      var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
+      new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+    });
 
-     document.getElementById("term").value=getParameterByName("term");
-     makeCy();
-	//parIt("cypher");
-	//parIt("neo4jUrl");
-	//todo dynamic configuration
-  var config = {}
-  var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-  new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
-});
-</script>
+    $("#diAPILoginForm").submit(function(e){
+      $.ajax({
+        url: 'http://10.33.36.143:8081/DIOntoManager/api/user/login',
+        type: 'POST',
+        data: $('#diAPILoginForm').serialize(),
+        success: function(data){
+          var inCorrectCredentials = "Incorrect Usename or Password";
+          if(data.trim() === inCorrectCredentials){
+            alert(data);
+          }
+          else {
+            
+            $('#diAPILoginForm').hide();
+            $('.authStatus').html("<font size=\"1\">" + data + "</font>");
+          }
+        },
+        error: function(err) {
+          alert (err.status)
+        }
+      })
+      e.preventDefault(); 
+    })
+  </script>
 <div id="syn" style="display:none; background-color:rgba(250, 250, 250, 0.9);" onClick="this.style='display:none;'"> </div>
-</ontodisplay>
+</div>
 </body>
 </html>

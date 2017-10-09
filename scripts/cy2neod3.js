@@ -23,6 +23,7 @@ function Cy2NeoD3(config, graphId, tableId, sourceId, execId, urlSource, renderG
 		console.log("Executing Query",query);
 		var execButton = $(this).find('i');
 		execButton.toggleClass('fa-play-circle-o fa-spinner fa-spin')
+		if (query.trim() !== ""){
 		neo.executeQuery(query,{},function(err,res) {
 			execButton.toggleClass('fa-spinner fa-spin fa-play-circle-o')
 			res = res || {}
@@ -46,6 +47,7 @@ function Cy2NeoD3(config, graphId, tableId, sourceId, execId, urlSource, renderG
 			}
 			if(cbResult) cbResult(res);
 		});
+}
 	} catch(e) {
 		console.log(e);
 		sweetAlert("Catched error", e, "error");

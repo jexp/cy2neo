@@ -4,13 +4,13 @@ svg {
    height:100%;
 }
 
-ontodisplay {
+.ontodisplay {
    position:absolute;
    width:65%;
    height:100%;
 }
 
-ontomanage {
+.ontomanage {
    position:absolute;
    top:0;
    right:0;
@@ -18,17 +18,17 @@ ontomanage {
    height:100%;
 }
 
-password{
+#credentials{
    position:relative;
    left:10px;
 }
 
-submit{
+#submit{
    position:relative;
    left:10px;
 }
 
-authentication{
+.authentication{
    position:absolute;
    width:auto;
    margin-right:10px;
