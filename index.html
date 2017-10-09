@@ -118,6 +118,9 @@ function getParameterByName(name, url) {
         url: 'http://10.33.36.143:8081/DIOntoManager/api/user/login',
         type: 'POST',
         data: $('#diAPILoginForm').serialize(),
+        xhrFields: {
+          withCredentials: true
+        },
         success: function(data){
           var inCorrectCredentials = "Incorrect Usename or Password";
           if(data.trim() === inCorrectCredentials){
@@ -126,7 +129,7 @@ function getParameterByName(name, url) {
           else {
             
             $('#diAPILoginForm').hide();
-            $('.authStatus').html("<font size=\"1\">" + data + "</font>");
+            $('.authStatus').html("<font size=\"1\">" + data + "( <p id=\"logout\">logout</p>)</font>");
           }
         },
         error: function(err) {
