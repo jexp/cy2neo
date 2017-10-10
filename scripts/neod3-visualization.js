@@ -72,7 +72,9 @@ function Neod3Renderer() {
         var result = "";
         //var synonym = $.parseJSON(JSON.stringify(node))["synonym"];
         //var exactSynonym = $.parseJSON(JSON.stringify(node))["http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"];
-        var diBSVEExactSynonym = $.parseJSON(JSON.stringify(node))["http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym"];
+        var nodePropData = $.parseJSON(JSON.stringify(node));
+        console.log(nodePropData);
+        var diBSVEExactSynonym = nodePropData["http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym"];
         /*if (synonym!=null){
             if (synonym.constructor === Array) {
                 for (var i = 0; i < synonym.length; i++){
@@ -124,6 +126,45 @@ function Neod3Renderer() {
         document.getElementById("syn").innerHTML = result;
         document.getElementById("syn").style = "display:block";
         placeDiv(mouseXpos, mouseYpos, result);
+
+        var nodePropertiesTable = [];
+        for (var key in nodePropData){
+            var nodeProperty = {}
+            nodeProperty["Property"] = key;
+            if (nodePropData[key].constructor !== Array){
+                nodeProperty["Value"] = nodePropData[key];
+            }
+            else {
+                for (var i = 0; i < nodePropData[key].length; i++){
+                    if (i==0){
+                        nodeProperty["Value"] = nodePropData[key][i];
+                    }
+                    else{
+                        nodeProperty["Value"] = nodeProperty["Value"] + "<br>" +nodePropData[key][i];
+                    }
+                }
+            }
+            nodePropertiesTable.push(nodeProperty);
+        }
+
+        $("#nodeProperties").jsGrid({
+            width: "100%",
+            height: "100%",
+
+            inserting: true,
+            editing: true,
+            sorting: false,
+            paging: false,
+
+            data: nodePropertiesTable,
+            fields: [
+            { name: "Property", type: "text", width: 475 },
+            { name: "Value", type: "text", width: 475 },
+            { type: "control", width: 50 }
+            ]
+        });
+
+         $("#nodeProperties").jsGrid("refresh");
     }
 
     function dummyFunc() {

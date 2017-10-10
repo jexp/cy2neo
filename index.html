@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="styles/gh-fork-ribbon.css">
   <title>Cy2NeoD3 - Tiny Neo4j Cypher Workbench</title>
 </head>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+
 <script>
   var apiServer="http://10.33.36.143:8081";
   function runScript(e) {
@@ -51,11 +51,11 @@ function getParameterByName(name, url) {
           <font size="1"><input type="submit" value="Submit"></font>
         </div>
       </form>
-      <div class="authStatus">
+      <div id="authStatus">
       </div>
     </div>
     <div class="modifyNode">
-      <div id="jsGrid">
+      <div id="nodeProperties">
       </div>
     </div>
   </div>  
@@ -103,6 +103,7 @@ function getParameterByName(name, url) {
    <script src="scripts/cy2neod3.js"></script>
    <script src="scripts/jquery.dataTables.min.js"></script>
    <script src="scripts/cypher.datatable.js"></script>
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 
 
 
@@ -121,8 +122,8 @@ function getParameterByName(name, url) {
         },
         success: function(data){
           $('#diAPILoginForm').hide();
-          $('.authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
-          $('.authStatus').show();
+          $('#authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
+          $('#authStatus').show();
         }
       })
       var config = {}
@@ -139,7 +140,7 @@ function getParameterByName(name, url) {
         },
         success: function(data){
           alert(data);
-          $('.authStatus').hide();
+          $('#authStatus').hide();
           $('#diAPILoginForm').show();
 
         },
@@ -166,8 +167,8 @@ function getParameterByName(name, url) {
           else {
             
             $('#diAPILoginForm').hide();
-            $('.authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
-            $('.authStatus').show();
+            $('#authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
+            $('#authStatus').show();
           }
         },
         error: function(err) {

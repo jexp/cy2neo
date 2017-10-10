@@ -19,25 +19,43 @@ svg {
 }
 
 #credentials{
-   position:relative;
-   left:10px;
+   text-align:right;
 }
 
-#submit{
-   position:relative;
-   left:10px;
-}
+
 
 .authentication{
    position:absolute;
-   width:auto;
-   margin-right:10px;
-   right:0;
+   width:100%;
+   height:auto;
+   margin-right:2px;
+   border: 4px;
+   border-style: double;
 }
 
-.authStatus{
-   position:relative;
-   left:10px;
+
+
+#authStatus{
+   text-align:right;
+}
+
+.modifyNode {
+   position:absolute;
+   top:30;
+   right:0;
+   width:100%;
+   height:100%;
+}
+
+#nodeProperties .jsgrid-cell{
+   
+   width:50%;
+   font-size:0.8em;
+   border: 4px;
+   border-style: double;
+}
+#nodeProperties .jsgrid-cell [type="text"] {
+   width:95%;
 }
 
 .CodeMirror, .CodeMirror-scroll {
