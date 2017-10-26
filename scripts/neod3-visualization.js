@@ -128,43 +128,72 @@ function Neod3Renderer() {
         placeDiv(mouseXpos, mouseYpos, result);
 
         var nodePropertiesTable = [];
+        var iri = "";
         for (var key in nodePropData){
             var nodeProperty = {}
-            nodeProperty["Property"] = key;
-            if (nodePropData[key].constructor !== Array){
-                nodeProperty["Value"] = nodePropData[key];
-            }
-            else {
-                for (var i = 0; i < nodePropData[key].length; i++){
-                    if (i==0){
-                        nodeProperty["Value"] = nodePropData[key][i];
-                    }
-                    else{
-                        nodeProperty["Value"] = nodeProperty["Value"] + "<br>" +nodePropData[key][i];
+            if (key.toLowerCase()!=="iri"){
+                nodeProperty["Property"] = key;
+                if (nodePropData[key].constructor !== Array){
+                    nodeProperty["Value"] = nodePropData[key];
+                }
+                else {
+                    for (var i = 0; i < nodePropData[key].length; i++){
+                        if (i==0){
+                            nodeProperty["Value"] = nodePropData[key][i];
+                        }
+                        else{
+                            nodeProperty["Value"] = nodeProperty["Value"] + "<br>" +nodePropData[key][i];
+                        }
                     }
                 }
+                nodePropertiesTable.push(nodeProperty);
             }
-            nodePropertiesTable.push(nodeProperty);
+            else {
+                iri=nodePropData[key];
+            }
         }
 
-        $("#nodeProperties").jsGrid({
-            width: "100%",
-            height: "100%",
+        if ($("#secondaryNodeProperties").is(":visible")){
+            $("#secondaryNodeProperties").jsGrid({
+                width: "100%",
+                height: "100%",
 
-            inserting: true,
-            editing: true,
-            sorting: false,
-            paging: false,
+                inserting: true,
+                editing: true,
+                sorting: false,
+                paging: false,
 
-            data: nodePropertiesTable,
-            fields: [
-            { name: "Property", type: "text", width: 475 },
-            { name: "Value", type: "text", width: 475 },
-            { type: "control", width: 50 }
-            ]
-        });
+                data: nodePropertiesTable,
+                fields: [
+                { name: "Property", type: "text" },
+                { name: "Value", type: "text" },
+                { type: "control", width: 50 }
+                ]
+            });
+            $("#secondaryiriannunciator").html("Properties for " +iri);
+            $("#secondaryNodeProperties").jsGrid("refresh");
+        }
+        else {
+            $("#primaryNodeProperties").jsGrid({
+                width: "100%",
+                height: "100%",
 
-         $("#nodeProperties").jsGrid("refresh");
+                inserting: true,
+                editing: true,
+                sorting: false,
+                paging: false,
+
+                data: nodePropertiesTable,
+                fields: [
+                { name: "Property", type: "text" },
+                { name: "Value", type: "text" },
+                { type: "control", width: 50 }
+                ]
+            });
+            $("#primaryiriannunciator").html("Properties for " +iri);
+            $("#primaryNodeProperties").jsGrid("refresh");
+            $("#savenode").show();
+        }
     }
 
     function dummyFunc() {

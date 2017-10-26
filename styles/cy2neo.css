@@ -25,7 +25,7 @@ svg {
 
 
 .authentication{
-   position:absolute;
+   position:relative;
    width:100%;
    height:auto;
    margin-right:2px;
@@ -39,23 +39,44 @@ svg {
    text-align:right;
 }
 
-.modifyNode {
-   position:absolute;
-   top:30;
+.nodeControls{
+   right:0;
+   width:100%;
+   
+   font-size:0.8em;
+}
+
+.primaryNode {
+   position:relative;
+   top:10px;
    right:0;
    width:100%;
    height:100%;
 }
 
-#nodeProperties .jsgrid-cell{
+.secondaryNode {
+   position:relative;
    
-   width:50%;
-   font-size:0.8em;
-   border: 4px;
-   border-style: double;
+   right:0;
+   width:100%;
+   height:40%;
 }
-#nodeProperties .jsgrid-cell [type="text"] {
-   width:95%;
+
+.relationshipControl{
+   position:relative;
+   top:30px;
+   right:0;
+   width:100%;
+   height:10%;
+}
+#primaryNodeProperties .jsgrid-cell{
+   word-wrap: break-word;
+   font-size:0.8em;
+}
+
+#secondaryNodeProperties .jsgrid-cell{
+   word-wrap: break-word;
+   font-size:0.8em;
 }
 
 .CodeMirror, .CodeMirror-scroll {
