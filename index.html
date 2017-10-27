@@ -63,14 +63,16 @@ function getParameterByName(name, url) {
         <input class="mngreltns" type="button" id="mngreltnsbtn" onclick="showSecondayProperties()" value="Manage Current Node Relationships"/>
       </form>
     </div>
-    <div class="secondaryNode">
-      <div id="secondaryiriannunciator"></div>
-      <div id="secondaryNodeProperties">
-      </div>
-
+    <div class="primaryNode">
+    <input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
+    <input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
+    <div id="primaryiriannunciator"></div>
+    <div id="primaryNodeProperties">
     </div>
+  </div>
+    
     <div class="relationshipControl">
-     <select>
+     <select id="relationshipDropdown">
       <option value="isSubclassOf">isSubclassOf</option>
       <option value="has_material_basis_in">has_material_basis_in</option>
       <option value="hasExactSynonym">hasExactSynonym</option>
@@ -79,13 +81,13 @@ function getParameterByName(name, url) {
     <input class="submitnewrelations" type="button" id="submitnewrelations" value="submit"/>
     <input class="cancelnewrelations" type="button" id="cancelnewrelations" value="cancel"/>
   </div>
-  <div class="primaryNode">
-    <input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
-    <input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
-    <div id="primaryiriannunciator"></div>
-    <div id="primaryNodeProperties">
+  <div class="secondaryNode">
+      <div id="secondaryiriannunciator"></div>
+      <div id="secondaryNodeProperties">
+      </div>
+
     </div>
-  </div>
+  
 </div>  
 <div class="ontodisplay">
   <div>
@@ -208,6 +210,7 @@ function getParameterByName(name, url) {
   };
 
   function showSecondayProperties(){
+    $(".primaryNode").height('40%');
     $(".secondaryNode").show();
     $(".relationshipControl").show();
     $("#savenode").hide();
@@ -364,7 +367,32 @@ function getParameterByName(name, url) {
 
   $("#submitnewrelations").click(function(){
       //alert("cancelling");
-      alert ("an ajax call to create the relationship will be sent to the back end");
+      //alert ("an ajax call to create the relationship will be sent to the back end");
+      var requestBodyString="subject="+$("#primaryiriannunciator").html().substring(15)+"&";
+      requestBodyString=requestBodyString+"object="+$("#secondaryiriannunciator").html().substring(15)+"&";
+      requestBodyString=requestBodyString+"relationship="+$('#relationshipDropdown').val();
+      $.ajax({
+        url: apiServer+'/DIOntoManager/api/neo4j/nodes/relationship/create',
+        type: 'POST',
+        data: requestBodyString,
+        xhrFields: {
+          withCredentials: true
+        },
+        success: function(data){
+          alert(data);
+          console.log(data);
+          var config = {}
+          var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
+          new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+          console.log("Create node query is " + requestBodyString);
+        },
+        error: function(xhr, status, error){
+          alert(xhr.statusText);
+          console.log(xhr.statusText + xhr.status);
+          //var err =JSON.parse(xhr.responseText);
+          //alert(err.Message);
+        }
+      })
       $(".secondaryNode").hide();
       $(".relationshipControl").hide();
       $("#savenode").show();
@@ -373,6 +401,7 @@ function getParameterByName(name, url) {
 
   $("#cancelnewrelations").click(function(){
       //alert("cancelling");
+      $(".primaryNode").height('100%');
       $(".secondaryNode").hide();
       $(".relationshipControl").hide();
       $("#savenode").show();
