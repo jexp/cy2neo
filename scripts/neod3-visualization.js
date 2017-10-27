@@ -167,7 +167,7 @@ function Neod3Renderer() {
                 fields: [
                 { name: "Property", type: "text" },
                 { name: "Value", type: "text" },
-                { type: "control", width: 50 }
+                { type: "control", deleteButton: false, width: 50 }
                 ]
             });
             $("#secondaryiriannunciator").html("Properties for " +iri);
@@ -187,12 +187,13 @@ function Neod3Renderer() {
                 fields: [
                 { name: "Property", type: "text" },
                 { name: "Value", type: "text" },
-                { type: "control", width: 50 }
+                { type: "control", deleteButton: false, width: 50 }
                 ]
             });
             $("#primaryiriannunciator").html("Properties for " +iri);
             $("#primaryNodeProperties").jsGrid("refresh");
             $("#savenode").show();
+            $("#savenewnode").hide();
         }
     }
 
