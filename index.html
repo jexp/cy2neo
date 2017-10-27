@@ -15,6 +15,7 @@
 
 <script>
   var apiServer="http://10.33.36.143:8081";
+  var validNodeProperties;
   function runScript(e) {
     if (e.keyCode == 13) {
       var config = {}
@@ -156,6 +157,7 @@ function getParameterByName(name, url) {
           withCredentials: true
         },
         success: function(data){
+          getValidNodeProperties();
           $('#diAPILoginForm').hide();
           $('#authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
           $('#authStatus').show();
@@ -165,6 +167,24 @@ function getParameterByName(name, url) {
       var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
       new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
     });
+
+  function getValidNodeProperties(){
+    $.ajax({
+      url: apiServer+'/DIOntoManager/api/neo4j/node/properties/getall',
+      type: 'GET',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: function(data){
+        validNodeProperties=JSON.parse(data);
+
+      },
+
+      error: function(err) {
+        alert (err.status)
+      }
+    })
+  }
 
   function logout(){
     $.ajax({
@@ -288,7 +308,7 @@ function getParameterByName(name, url) {
 
       data: [],
       fields: [
-      { name: "Property", type: "text" },
+      { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
       { name: "Value", type: "text" },
       { type: "control", deleteButton: false, width: 50 }
       ]
@@ -372,7 +392,7 @@ function getParameterByName(name, url) {
           alert(data);
         }
         else {
-
+          getValidNodeProperties();
           $('#diAPILoginForm').hide();
           $('#authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
           $('#authStatus').show();

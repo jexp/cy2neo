@@ -165,7 +165,7 @@ function Neod3Renderer() {
 
                 data: nodePropertiesTable,
                 fields: [
-                { name: "Property", type: "text" },
+                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
                 { name: "Value", type: "text" },
                 { type: "control", deleteButton: false, width: 50 }
                 ]
@@ -185,7 +185,7 @@ function Neod3Renderer() {
 
                 data: nodePropertiesTable,
                 fields: [
-                { name: "Property", type: "text" },
+                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
                 { name: "Value", type: "text" },
                 { type: "control", deleteButton: false, width: 50 }
                 ]
