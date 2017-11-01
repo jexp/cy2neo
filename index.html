@@ -107,7 +107,7 @@ function getParameterByName(name, url) {
   <div role="tabpanel">
     <form action="">
       <input type="radio" name="searchmethod" value="bsveSearch"> BSVE Search
-      <input type="radio" name="searchmethod" value="rdflabelSearch" checked="checked"> Search By rdflabel
+      <input type="radio" name="searchmethod" value="labelSearch" checked="checked"> Search By label
       <input type="radio" name="searchmethod" value="iriSearch" checked="checked"> Search By iri
       <input type="radio" name="searchmethod" value="BSVEIRISearch" checked="checked"> Search By BSVE iri (Use * to get all BSVE Nodes)
     </form>
@@ -295,7 +295,7 @@ function getParameterByName(name, url) {
       })
     }
     else {
-      alert("All created nodes must have a \"rdflabel\" parameter")
+      alert("All created nodes must have a \"label\" parameter")
     }
     
   }
