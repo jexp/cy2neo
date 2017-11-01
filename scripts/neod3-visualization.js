@@ -167,7 +167,7 @@ function Neod3Renderer() {
                 fields: [
                 { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
                 { name: "Value", type: "text" },
-                { type: "control", deleteButton: false, width: 50 }
+                { type: "control", width: 50 }
                 ]
             });
             $("#secondaryiriannunciator").html("Properties for " +iri);
@@ -187,7 +187,7 @@ function Neod3Renderer() {
                 fields: [
                 { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
                 { name: "Value", type: "text" },
-                { type: "control", deleteButton: false, width: 50 }
+                { type: "control", width: 50 }
                 ]
             });
             $("#primaryiriannunciator").html("Properties for " +iri);

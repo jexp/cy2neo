@@ -245,6 +245,7 @@ function getParameterByName(name, url) {
         new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
       },
       error: function(xhr, status, error){
+        alert(xhr.statusText);
         console.log(xhr.statusText);
           //var err =JSON.parse(xhr.responseText);
           //alert(err.Message);
@@ -408,7 +409,7 @@ function getParameterByName(name, url) {
         fields: [
           { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
           { name: "Value", type: "text" },
-          { type: "control", deleteButton: false, width: 50 }
+          { type: "control", width: 50 }
         ]
       });
       $(".primaryNode").height('100%');
@@ -434,7 +435,7 @@ function getParameterByName(name, url) {
         fields: [
           { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
           { name: "Value", type: "text" },
-          { type: "control", deleteButton: false, width: 50 }
+          { type: "control", width: 50 }
         ]
       });
       $(".primaryNode").height('100%');
