@@ -183,12 +183,22 @@ function getParameterByName(name, url) {
   	$("#relationshipDropdown").select2({
   		tags: true,
   		ajax: {
-      		url: apiServer+'/DIOntoManager/api/neo4j/relationships/getall',
+      		url: apiServer+'/DIOntoManager/api/neo4j/relationship/find',
       		type: 'GET',
       		dataType: 'json',
       		xhrFields: {
         		withCredentials: true
       		},
+      		data: function (params) {
+      			console.log(params);
+      			var query = {
+        			relationshipName: params.term,
+        			
+      			}
+
+      			// Query parameters will be ?search=[term]&type=public
+      			return query;
+    		},
       		processResults: function(data, params){
       			//console.log(params);
       			for (i=0; i<data.length; i++){
