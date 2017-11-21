@@ -46,88 +46,89 @@ function getParameterByName(name, url) {
 
 </script>
 <body>
-  <div class="ontomanage">
-    <div class="authentication">
-      <form id="diAPILoginForm" method="post">
-        <div id="credentials">
-          <font size="1">Username:<input type="text" name="username" id="diAPIUsername" ></font>
-          <font size="1">Password:<input type="password" name="password" id="diAPIPassword" ></font>
-          <font size="1"><input type="submit" value="Submit"></font>
-        </div>
-      </form>
-      <div id="authStatus">
-      </div>
-    </div>
-    <div class="nodeControls">
-      <form>
-        <input class="createnode" type="button" id="createnodebtn" onclick="createNodeBtnPressed()" value="Create New Node"/>
-        <input class="mngreltns" type="button" id="mngreltnsbtn" onclick="displayCreateRelationshipControls()" value="Create A Relationship"/>
-      </form>
-    </div>
-    <div class="primaryNode">
-      <input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
-      <input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
-      <div id="primaryiriannunciator"></div>
-      <div id="primaryNodeProperties"></div>
-    </div>
+	<div class="authentication">
+		<form id="diAPILoginForm" method="post">
+			<div id="credentials">
+				<font size="1">Username:<input type="text" name="username" id="diAPIUsername" ></font>
+				<font size="1">Password:<input type="password" name="password" id="diAPIPassword" ></font>
+				<font size="1"><input type="submit" value="Submit"></font>
+			</div>
+		</form>
+		<div id="authStatus"></div>
+	</div>
+	<div class="ontomanage">
+
+		<div class="nodeControls">
+			<form>
+				<input class="createnode" type="button" id="createnodebtn" onclick="createNodeBtnPressed()" value="Create New Node"/>
+				<input class="deletenode" type="button" id="deletenodebtn" onclick="deleteNodeBtnPressed()" value="Delete Node"/>
+				<input class="mngreltns" type="button" id="mngreltnsbtn" onclick="displayCreateRelationshipControls()" value="Create A Relationship"/>
+			</form>
+		</div>
+		<div class="primaryNode">
+			<input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
+			<input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
+			<div id="primaryiriannunciator"></div>
+			<div id="primaryNodeProperties"></div>
+		</div>
 
 
-    
-    <div class="relationshipControl">
-    	<select id="relationshipDropdown">
-    	</select> 
-     
-    <input class="createrelationship" type="button" id="createrelationship" value="Create Relationship"/>
-    <input class="modifyrelationship" type="button" id="modifyrelationship" value="Modify relationship"/>
-    <input class="deleterelationship" type="button" id="deleterelationship" value="Delete relationship"/>
-    <input class="cancelnewrelations" type="button" id="cancelnewrelations" value="cancel"/>
-  </div>
-  <div class="secondaryNode">
-    <div id="secondaryiriannunciator"></div>
-    <div id="secondaryNodeProperties">
-    </div>
 
-  </div>
-  
-</div>  
-<div class="ontodisplay">
-  <div>
-    <form>
-      <input class="form-control" type="hidden" value="http://ns527777.ip-149-56-18.net:8085/DIOntoManager" id="neo4jUrl"/><br/>
-      <input class="form-control" type="hidden" size="8" value="neo4j" id="neo4jUser"/>
-      <input class="form-control" type="hidden" size="8" placeholder="password" value="test" id="neo4jPass"/><br/>
+		<div class="relationshipControl">
+			<select id="relationshipDropdown"></select> 
+			<input class="createrelationship" type="button" id="createrelationship" value="Create Relationship"/>
+			<input class="modifyrelationship" type="button" id="modifyrelationship" value="Modify relationship"/>
+			<input class="deleterelationship" type="button" id="deleterelationship" value="Delete relationship"/>
+			<input class="cancelnewrelations" type="button" id="cancelnewrelations" value="cancel"/>
+		</div>
+		<div class="secondaryNode">
+			<div id="secondaryiriannunciator"></div>
+			<div id="secondaryNodeProperties"></div>
 
-      <textarea name="cypher" id="cypher" rows="4" cols="120" data-lang="cypher" class="code form-control">
-      </textarea>
+		</div>
 
-      <input class="form-control" type="text" name="term" id="term" size="60" onkeypress="makeCy();return runScript(event);" onKeyUp="makeCy();">
-      <a href="#" title="Execute" id="execute" style="display:none"><i class="fa fa-play-circle-o"></i></a>
-    </form>
-  </div>
+	</div>  
+	<div class="ontodisplay">
+		<div>
+			<form>
+				<input class="form-control" type="hidden" value="http://ns527777.ip-149-56-18.net:8085/DIOntoManager" id="neo4jUrl"/><br/>
+				<input class="form-control" type="hidden" size="8" value="neo4j" id="neo4jUser"/>
+				<input class="form-control" type="hidden" size="8" placeholder="password" value="test" id="neo4jPass"/><br/>
 
-  <div role="tabpanel">
-    <form action="">
-      <input type="radio" name="searchmethod" value="bsveSearch"> BSVE Search
-      <input type="radio" name="searchmethod" value="labelSearch" checked="checked"> Search By label
-      <input type="radio" name="searchmethod" value="iriSearch" checked="checked"> Search By iri
-      <input type="radio" name="searchmethod" value="BSVEIRISearch" checked="checked"> Search By BSVE iri (Use * to get all BSVE Nodes)
-    </form>
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#graph" aria-controls="home" role="tab" data-toggle="tab">Graph</a></li>
-      <li role="presentation"><a href="#table" aria-controls="table" role="tab" data-toggle="tab">Table</a></li>
-    </ul>
+				<textarea name="cypher" id="cypher" rows="4" cols="120" data-lang="cypher" class="code form-control">
+				</textarea>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="graph">
-       <div class="tab-pane active" id="graph">&nbsp;</div>
-     </div>
-     <div role="tabpanel" class="tab-pane" id="table">
-       <div id="datatable"></div>
-     </div>
-   </div>  
- </div>
+				<input class="form-control" type="text" name="term" id="term" size="60" onkeypress="makeCy();return runScript(event);" onKeyUp="makeCy();">
+				<a href="#" title="Execute" id="execute" style="display:none"><i class="fa fa-play-circle-o"></i></a>
+			</form>
+		</div>
+
+		<div role="tabpanel">
+			<form action="">
+				<input type="radio" name="searchmethod" value="labelSearch" checked="checked"> Search By label
+				<input type="radio" name="searchmethod" value="bsveSearch" >BSVE Search
+				<div id="authenticatedSearchOptions"> 
+					<input type="radio" name="searchmethod" value="iriSearch" > Search By iri
+					<input type="radio" name="searchmethod" value="BSVEIRISearch" > Search By BSVE iri (Use * to get all BSVE Nodes)
+				</div>
+			</form>
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#graph" aria-controls="home" role="tab" data-toggle="tab">Graph</a></li>
+				<li role="presentation"><a href="#table" aria-controls="table" role="tab" data-toggle="tab">Table</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="graph">
+					<div class="tab-pane active" id="graph">&nbsp;</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="table">
+					<div id="datatable"></div>
+				</div>
+			</div>  
+		</div>
+	
 
  <script src="scripts/codemirror.js"></script>
  <script src="scripts/codemirror-cypher.js"></script>
@@ -150,7 +151,8 @@ function getParameterByName(name, url) {
     makeCy();
     $(".secondaryNode").hide();
    // $(".primaryNode").hide();
-   var relationshipIRI="";
+   	var relationshipIRI="";
+   	var currentUserDetails;
     $(".relationshipControl").hide();
     $("#savenode").hide();
     $("#savenewnode").hide();
@@ -165,17 +167,47 @@ function getParameterByName(name, url) {
           withCredentials: true
         },
         success: function(data){
-          getValidNodeProperties();
+         // getValidNodeProperties();
+         changeToAuthenticatedDisplay();
           $('#diAPILoginForm').hide();
           $('.relationshipControl').hide();
-          $('#authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
+          $('#authStatus').html("<font size=\"1\">Welcome " + data.User + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
           $('#authStatus').show();
+          if (data.Authorized){
+          	getValidNodeProperties();
+
+          	$(".ontomanage").show();
+          	$(".ontodisplay").width("65%");
+         
+          	//alert("This user can modify nodes");
+          }
+          else {
+          	$(".ontomanage").hide();
+          	$(".ontodisplay").width("100%");
+          }
+        },
+        error: function(){
+        	$(".ontomanage").hide();
+          	$(".ontodisplay").width("100%");
+          	changeToUnAuthenticatedDisplay()
         }
       })
       var config = {}
       var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
       new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
     });
+
+  function changeToAuthenticatedDisplay(){
+  	//$("input[type='radio'][value='iriSearch']").show();
+  	//$("input[type='radio'][value='BSVEIRISearch']").show();
+  	$("#authenticatedSearchOptions").show();
+  }
+
+  function changeToUnAuthenticatedDisplay(){
+  	//$("input[type='radio'][value='iriSearch']").hide();
+  	//$("input[type='radio'][value='BSVEIRISearch']").hide();
+  	$("#authenticatedSearchOptions").hide();
+  }
 
   function initManageRelationshipControls(relationshipType){
   	$("#relationshipDropdown").width("40%");
@@ -247,11 +279,17 @@ function getParameterByName(name, url) {
         alert(data);
         $('#authStatus').hide();
         $('#diAPILoginForm').show();
+        $(".ontomanage").hide();
+        $(".ontodisplay").width("100%");
+        changeToUnAuthenticatedDisplay();
 
       },
 
       error: function(err) {
-        alert (err.status)
+        alert (err.status);
+        $(".ontomanage").hide();
+        $(".ontodisplay").width("100%");
+        changeToUnAuthenticatedDisplay();
       }
     })
   };
@@ -365,6 +403,44 @@ function getParameterByName(name, url) {
     $("#primaryiriannunciator").html("");
     $("#primaryNodeProperties").jsGrid("refresh");
     $(".primaryNode").show();
+  }
+
+  function deleteNodeBtnPressed(){
+  	if($("#savenode").is(":visible")){
+  		if (confirm("Please confirm deletion of " + $("#primaryiriannunciator").html().substring(15)) == true) {
+    		//alert ("we will delete " + $("#primaryiriannunciator").html().substring(15));
+    		var requestBodyString="nodeIRI="+$("#primaryiriannunciator").html().substring(15)+"&";
+     
+      		$.ajax({
+        		url: apiServer+'/DIOntoManager/api/neo4j/node/delete',
+        		type: 'POST',
+        		data: requestBodyString,
+        		xhrFields: {
+          			withCredentials: true
+        		},
+        		success: function(data){
+          			alert(JSON.stringify(data));
+          			//console.log(data);
+          			var config = {}
+          			var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
+          			new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+          			//console.log("Create node query is " + requestBodyString);
+           			//$("#secondaryiriannunciator").html("");
+        		},
+        		error: function(xhr, status, error){
+          			alert(xhr.statusText);
+          			console.log(xhr.statusText + xhr.status);
+          			//var err =JSON.parse(xhr.responseText);
+          			//alert(err.Message);
+        		}
+      		});
+		} else {
+    		alert("Cancelled Deletion");
+		}
+  	}
+  	else{
+  		alert("Please select a node to delete");
+  	}
   }
 
   function createNodeBtnPressed(){
@@ -604,14 +680,23 @@ function getParameterByName(name, url) {
       },
       success: function(data){
         var inCorrectCredentials = "Incorrect Username or Password";
-        if(data.trim() === inCorrectCredentials){
-          alert(data);
+        if(!data.Authenticated){
+          alert("Incorrect Username or Password");
+          changeToUnAuthenticatedDisplay();
         }
         else {
-          getValidNodeProperties();
+          //getValidNodeProperties();
+          currentUserDetails=data;
+          changeToAuthenticatedDisplay();
           $('#diAPILoginForm').hide();
-          $('#authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
+          $('#authStatus').html("<font size=\"1\">Welcome " + currentUserDetails.User + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
           $('#authStatus').show();
+          if (currentUserDetails.Authorized){
+          	getValidNodeProperties();
+          	$(".ontomanage").show();
+          	$(".ontodisplay").width("65%");
+          	
+          }
         }
       },
       error: function(err) {

@@ -189,9 +189,7 @@ function Neod3Renderer() {
         var nodePropData = $.parseJSON(JSON.stringify(node));
         console.log(nodePropData);
         var diBSVEExactSynonym = nodePropData["http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym"];
-        if(!$("#createrelationship").is(":visible")){
-            $("#cancelnewrelations").click();
-        }
+        
         /*if (synonym!=null){
             if (synonym.constructor === Array) {
                 for (var i = 0; i < synonym.length; i++){
@@ -316,6 +314,9 @@ function Neod3Renderer() {
             $(".primaryNode").show();
             $(".primaryNode").height('100%');
             
+        }
+        if(!$("#createrelationship").is(":visible")){
+            $("#cancelnewrelations").click();
         }
     }
 
