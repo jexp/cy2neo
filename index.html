@@ -149,6 +149,7 @@ function getParameterByName(name, url) {
     makeCy();
     $(".secondaryNode").hide();
    // $(".primaryNode").hide();
+   var relationshipIRI="";
     $(".relationshipControl").hide();
     $("#savenode").hide();
     $("#savenewnode").hide();
@@ -427,7 +428,35 @@ function getParameterByName(name, url) {
   };
 
   $("#modifyrelationship").click(function(){
-  	alert("we will create a relationship of" + $('#relationshipDropdown option:selected').text());
+  	//alert("we will create a relationship of" + $('#relationshipDropdown option:selected').text());
+  	var requestBodyString="subject="+$("#primaryiriannunciator").html().substring(15)+"&";
+    requestBodyString=requestBodyString+"object="+$("#secondaryiriannunciator").html().substring(15)+"&";
+    requestBodyString=requestBodyString+"oldrelationship="+relationshipIRI+"&";
+    requestBodyString=requestBodyString+"newrelationship="+$('#relationshipDropdown option:selected').text();
+    //console.log(requestBodyString);
+  	$.ajax({
+        url: apiServer+'/DIOntoManager/api/neo4j/nodes/relationship/modify',
+        type: 'POST',
+        data: requestBodyString,
+        xhrFields: {
+          withCredentials: true
+        },
+        success: function(data){
+          alert(data);
+          console.log(data);
+          var config = {}
+          var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
+          new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+          //console.log("Create node query is " + requestBodyString);
+           
+        },
+        error: function(xhr, status, error){
+          alert(xhr.statusText);
+          console.log(xhr.statusText + xhr.status);
+          //var err =JSON.parse(xhr.responseText);
+          //alert(err.Message);
+        }
+      })
   })
 
   $("#createrelationship").click(function(){

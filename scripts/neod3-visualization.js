@@ -70,7 +70,7 @@ function Neod3Renderer() {
     function relationshipClickedHandler(relationship){
         console.log(relationship);
         var subjectNode = relationship.source.propertyMap;
-        var relationshipIRI = relationship.type;
+        relationshipIRI = relationship.type;
         var objectNode = relationship.target.propertyMap;
         var subjectNodePropertiesTable = [];
         var objectNodePropertiesTable = [];
