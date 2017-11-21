@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="styles/gh-fork-ribbon.css">
   <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
   <title>Cy2NeoD3 - Tiny Neo4j Cypher Workbench</title>
 </head>
 
@@ -60,25 +61,24 @@ function getParameterByName(name, url) {
     <div class="nodeControls">
       <form>
         <input class="createnode" type="button" id="createnodebtn" onclick="createNodeBtnPressed()" value="Create New Node"/>
-        <input class="mngreltns" type="button" id="mngreltnsbtn" onclick="showSecondayProperties()" value="Manage Current Node Relationships"/>
+        <input class="mngreltns" type="button" id="mngreltnsbtn" onclick="displayCreateRelationshipControls()" value="Create A Relationship"/>
       </form>
     </div>
     <div class="primaryNode">
       <input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
       <input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
       <div id="primaryiriannunciator"></div>
-      <div id="primaryNodeProperties">
-      </div>
+      <div id="primaryNodeProperties"></div>
     </div>
+
+
     
     <div class="relationshipControl">
-     <select id="relationshipDropdown">
-      <option value="isSubclassOf">isSubclassOf</option>
-      <option value="has_material_basis_in">has_material_basis_in</option>
-      <option value="hasExactSynonym">hasExactSynonym</option>
-      <option value="hasSynonym">hasSynonym</option>
-    </select> 
-    <input class="submitnewrelations" type="button" id="submitnewrelations" value="submit"/>
+    	<select id="relationshipDropdown">
+    	</select> 
+     
+    <input class="createrelationship" type="button" id="createrelationship" value="Create Relationship"/>
+    <input class="modifyrelationship" type="button" id="modifyrelationship" value="Modify relationship"/>
     <input class="cancelnewrelations" type="button" id="cancelnewrelations" value="cancel"/>
   </div>
   <div class="secondaryNode">
@@ -139,6 +139,7 @@ function getParameterByName(name, url) {
  <script src="scripts/jquery.dataTables.min.js"></script>
  <script src="scripts/cypher.datatable.js"></script>
  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
 
 
 
@@ -147,9 +148,11 @@ function getParameterByName(name, url) {
     document.getElementById("term").value=getParameterByName("term");
     makeCy();
     $(".secondaryNode").hide();
+   // $(".primaryNode").hide();
     $(".relationshipControl").hide();
     $("#savenode").hide();
     $("#savenewnode").hide();
+
       //parIt("cypher");
       //parIt("neo4jUrl");
       //todo dynamic configuration
@@ -162,6 +165,7 @@ function getParameterByName(name, url) {
         success: function(data){
           getValidNodeProperties();
           $('#diAPILoginForm').hide();
+          $('.relationshipControl').hide();
           $('#authStatus').html("<font size=\"1\">" + data + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
           $('#authStatus').show();
         }
@@ -170,6 +174,37 @@ function getParameterByName(name, url) {
       var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
       new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
     });
+
+  function initManageRelationshipControls(relationshipType){
+  	$("#relationshipDropdown").width("60%");
+  	$(".secondaryNode").show();
+    $(".primaryNode").show();
+    
+  	$("#relationshipDropdown").select2({
+  		tags: true,
+  		ajax: {
+      		url: apiServer+'/DIOntoManager/api/neo4j/relationships/getall',
+      		type: 'GET',
+      		dataType: 'json',
+      		xhrFields: {
+        		withCredentials: true
+      		},
+      		processResults: function(data, params){
+      			//console.log(params);
+      			for (i=0; i<data.length; i++){
+      				if (data[i].text===relationshipType){
+      					selectedRelationshipId=data[i].id;
+      				}
+      			};
+      			return {
+      				results: data
+      			}
+      		}
+      	}
+    });
+   // $('#relationshipDropdown').select2().val(selectedRelationshipId).trigger('change.select2');
+    $(".relationshipControl").show();
+  }
 
   function getValidNodeProperties(){
     $.ajax({
@@ -209,11 +244,19 @@ function getParameterByName(name, url) {
     })
   };
 
-  function showSecondayProperties(){
-    $(".primaryNode").height('40%');
-    $(".secondaryNode").show();
-    $(".relationshipControl").show();
-    $("#savenode").hide();
+  function displayCreateRelationshipControls(){
+  	if($("#savenode").is(":visible")){
+    	initManageRelationshipControls();
+    	$(".secondaryNode").show();
+    	$("#createrelationship").show();
+    	$("#modifyrelationship").hide();
+    	$("#savenode").hide();
+    	$(".primaryNode").height('40%');
+        $(".secondaryNode").height('40%');
+	}
+	else {
+		alert("Please select a subject node for the relationship");
+	}
   }
 
   function saveNode(){
@@ -301,7 +344,18 @@ function getParameterByName(name, url) {
     
   }
 
+  function initializeCreateNodeControls(){
+  	$("#savenode").hide();
+    $("#savenewnode").show();
+    $(".secondaryNode").hide();
+    $(".relationshipControl").hide();
+    $("#primaryiriannunciator").html("");
+    $("#primaryNodeProperties").jsGrid("refresh");
+    $(".primaryNode").show();
+  }
+
   function createNodeBtnPressed(){
+  	initializeCreateNodeControls();
     $("#primaryNodeProperties").jsGrid({
       width: "100%",
       height: "100%",
@@ -318,12 +372,7 @@ function getParameterByName(name, url) {
       { type: "control", deleteButton: false, width: 50 }
       ]
     });
-    $("#savenode").hide();
-    $("#savenewnode").show();
-    $(".secondaryNode").hide();
-    $(".relationshipControl").hide();
-    $("#primaryiriannunciator").html("");
-    $("#primaryNodeProperties").jsGrid("refresh");
+   
   }
 
   function getlastindex(){
@@ -367,7 +416,11 @@ function getParameterByName(name, url) {
 
   };
 
-  $("#submitnewrelations").click(function(){
+  $("#modifyrelationship").click(function(){
+  	alert("we will create a relationship of" + $('#relationshipDropdown option:selected').text());
+  })
+
+  $("#createrelationship").click(function(){
       //alert("cancelling");
       //alert ("an ajax call to create the relationship will be sent to the back end");
       var requestBodyString="subject="+$("#primaryiriannunciator").html().substring(15)+"&";
