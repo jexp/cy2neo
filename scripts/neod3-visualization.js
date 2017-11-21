@@ -153,6 +153,7 @@ function Neod3Renderer() {
              //$(".relationshipControl").show();
         $("#createrelationship").hide();
         $("#modifyrelationship").show();
+        $("#deleterelationship").show();
         initManageRelationshipControls(relationshipIRI);
 
         
