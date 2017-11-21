@@ -68,7 +68,7 @@ function Neod3Renderer() {
     }
 
     function relationshipClickedHandler(relationship){
-        console.log(relationship);
+        if (currentUserDetails.modifynode_authorized){
         var subjectNode = relationship.source.propertyMap;
         relationshipIRI = relationship.type;
         var objectNode = relationship.target.propertyMap;
@@ -123,13 +123,15 @@ function Neod3Renderer() {
                 objectiri=objectNode[key];
             }
         }
+        
+
 
          $("#primaryNodeProperties").jsGrid({
                 width: "100%",
                 height: "100%",
 
-                inserting: true,
-                editing: true,
+                inserting: false,
+                editing: false,
                 sorting: false,
                 paging: false,
 
@@ -161,8 +163,8 @@ function Neod3Renderer() {
                 width: "100%",
                 height: "100%",
 
-                inserting: true,
-                editing: true,
+                inserting: false,
+                editing: false,
                 sorting: false,
                 paging: false,
 
@@ -177,7 +179,7 @@ function Neod3Renderer() {
             $("#secondaryNodeProperties").jsGrid("refresh");
             $(".primaryNode").height('40%');
             $(".secondaryNode").height('40%');
-
+        }
 
     }
 
@@ -267,23 +269,28 @@ function Neod3Renderer() {
                 iri=nodePropData[key];
             }
         }
-
+        var inserting = currentUserDetails.modifynode_authorized;
+        var editing = currentUserDetails.modifynode_authorized;
+        var fields = [
+            { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
+            { name: "Value", type: "text" },
+            
+        ]
+        if (currentUserDetails.modifynode_authorized){
+            fields.push({ type: "control", width: 50 });
+        }
         if ($("#secondaryNodeProperties").is(":visible")){
             $("#secondaryNodeProperties").jsGrid({
                 width: "100%",
                 height: "100%",
 
-                inserting: true,
-                editing: true,
+                inserting: false,
+                editing: false,
                 sorting: false,
                 paging: false,
 
                 data: nodePropertiesTable,
-                fields: [
-                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
-                { name: "Value", type: "text" },
-                { type: "control", width: 50 }
-                ]
+                fields:fields
             });
             $("#secondaryiriannunciator").html("Properties for " +iri);
             $("#secondaryNodeProperties").jsGrid("refresh");
@@ -295,21 +302,17 @@ function Neod3Renderer() {
                 width: "100%",
                 height: "100%",
 
-                inserting: true,
-                editing: true,
+                inserting: inserting,
+                editing: editing,
                 sorting: false,
                 paging: false,
 
                 data: nodePropertiesTable,
-                fields: [
-                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
-                { name: "Value", type: "text" },
-                { type: "control", width: 50 }
-                ]
+                fields:fields
             });
             $("#primaryiriannunciator").html("Properties for " +iri);
             $("#primaryNodeProperties").jsGrid("refresh");
-            $("#savenode").show();
+
             $("#savenewnode").hide();
             $(".primaryNode").show();
             $(".primaryNode").height('100%');
