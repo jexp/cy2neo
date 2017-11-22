@@ -139,7 +139,7 @@ function Neod3Renderer() {
                 fields: [
                 { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
                 { name: "Value", type: "text" },
-                { type: "control", width: 50 }
+                
                 ]
             });
             $("#primaryiriannunciator").html("Properties for " +subjectiri);
@@ -149,7 +149,7 @@ function Neod3Renderer() {
 
             $("#relationshipDropdown").empty();
             $('#relationshipDropdown').append($('<option>', {
-                value: 0,
+                value: -1,
                 text: relationshipIRI
             }));
              //$(".relationshipControl").show();
@@ -172,7 +172,7 @@ function Neod3Renderer() {
                 fields: [
                 { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
                 { name: "Value", type: "text" },
-                { type: "control", width: 50 }
+                
                 ]
             });
             $("#secondaryiriannunciator").html("Properties for " +objectiri);
