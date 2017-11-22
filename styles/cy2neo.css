@@ -7,12 +7,13 @@ svg {
 .ontodisplay {
    position:absolute;
    width:65%;
+   top:10%;
    height:100%;
 }
 
 .ontomanage {
    position:absolute;
-   top:0;
+   top:10%;
    right:0;
    width:35%;
    height:100%;
@@ -25,9 +26,9 @@ svg {
 
 
 .authentication{
-   position:relative;
+   position:absolute;
    width:100%;
-   height:auto;
+   height:10%;
    margin-right:2px;
    border: 4px;
    border-style: double;
@@ -46,10 +47,9 @@ svg {
    font-size:0.8em;
 }
 
-.primaryNode {
+.primaryNode, {
    position:relative;
    
-   right:0;
    width:100%;
    height:100%;
 }
@@ -57,9 +57,16 @@ svg {
 .secondaryNode {
    position:relative;
    top:30px;
-   right:0;
+   
    width:100%;
    height:100%;
+}
+
+.currentRelationship {
+   position:relative;
+   top:30px;
+   width:100%;
+   height:10%;
 }
 
 .relationshipControl{
@@ -68,6 +75,8 @@ svg {
    width:100%;
    height:10%;
 }
+
+
 #primaryNodeProperties .jsgrid-cell{
    word-wrap: break-word;
    font-size:0.8em;

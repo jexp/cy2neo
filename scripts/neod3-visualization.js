@@ -67,6 +67,122 @@ function Neod3Renderer() {
         }
     }
 
+    function relationshipClickedHandler(relationship){
+        if (currentUserDetails.modifynode_authorized){
+        var subjectNode = relationship.source.propertyMap;
+        relationshipIRI = relationship.type;
+        var objectNode = relationship.target.propertyMap;
+        var subjectNodePropertiesTable = [];
+        var objectNodePropertiesTable = [];
+        var subjectiri = "";
+        var objectiri = "";
+        for (var key in subjectNode){
+            var subjectNodeProperty = {}
+            if (key.toLowerCase()!=="iri"){
+                subjectNodeProperty["Property"] = key;
+                if (subjectNode[key].constructor !== Array){
+                    subjectNodeProperty["Value"] = subjectNode[key];
+                }
+                else {
+                    for (var i = 0; i < subjectNode[key].length; i++){
+                        if (i==0){
+                            subjectNodeProperty["Value"] = subjectNode[key][i];
+                        }
+                        else{
+                            subjectNodeProperty["Value"] = subjectNodeProperty["Value"] + "<br>" +subjectNode[key][i];
+                        }
+                    }
+                }
+                subjectNodePropertiesTable.push(subjectNodeProperty);
+            }
+            else {
+                subjectiri=subjectNode[key];
+            }
+        }
+
+        for (var key in objectNode){
+            var objectNodeProperty = {}
+            if (key.toLowerCase()!=="iri"){
+                objectNodeProperty["Property"] = key;
+                if (objectNode[key].constructor !== Array){
+                    objectNodeProperty["Value"] = objectNode[key];
+                }
+                else {
+                    for (var i = 0; i < objectNode[key].length; i++){
+                        if (i==0){
+                            objectNodeProperty["Value"] = objectNode[key][i];
+                        }
+                        else{
+                            objectNodeProperty["Value"] = objectNodeProperty["Value"] + "<br>" +objectNode[key][i];
+                        }
+                    }
+                }
+                objectNodePropertiesTable.push(objectNodeProperty);
+            }
+            else {
+                objectiri=objectNode[key];
+            }
+        }
+        
+
+
+         $("#primaryNodeProperties").jsGrid({
+                width: "100%",
+                height: "100%",
+
+                inserting: false,
+                editing: false,
+                sorting: false,
+                paging: false,
+
+                data: subjectNodePropertiesTable,
+                fields: [
+                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
+                { name: "Value", type: "text" },
+                
+                ]
+            });
+            $("#primaryiriannunciator").html("Properties for " +subjectiri);
+            $("#primaryNodeProperties").jsGrid("refresh");
+            $("#savenode").hide();
+            $("#savenewnode").hide();
+
+            $("#relationshipDropdown").empty();
+            $('#relationshipDropdown').append($('<option>', {
+                value: -1,
+                text: relationshipIRI
+            }));
+             //$(".relationshipControl").show();
+        $("#createrelationship").hide();
+        $("#modifyrelationship").show();
+        $("#deleterelationship").show();
+        initManageRelationshipControls(relationshipIRI);
+
+        
+        $("#secondaryNodeProperties").jsGrid({
+                width: "100%",
+                height: "100%",
+
+                inserting: false,
+                editing: false,
+                sorting: false,
+                paging: false,
+
+                data: objectNodePropertiesTable,
+                fields: [
+                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
+                { name: "Value", type: "text" },
+                
+                ]
+            });
+            $("#secondaryiriannunciator").html("Properties for " +objectiri);
+            $("#secondaryNodeProperties").jsGrid("refresh");
+            $(".primaryNode").height('40%');
+            $(".secondaryNode").height('40%');
+        }
+
+    }
+
     function nodeClickedHandler(node){
         var resultAssocArray = {};
         var result = "";
@@ -75,6 +191,7 @@ function Neod3Renderer() {
         var nodePropData = $.parseJSON(JSON.stringify(node));
         console.log(nodePropData);
         var diBSVEExactSynonym = nodePropData["http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym"];
+        
         /*if (synonym!=null){
             if (synonym.constructor === Array) {
                 for (var i = 0; i < synonym.length; i++){
@@ -152,48 +269,57 @@ function Neod3Renderer() {
                 iri=nodePropData[key];
             }
         }
-
+        var inserting = currentUserDetails.modifynode_authorized;
+        var editing = currentUserDetails.modifynode_authorized;
+        var fields = [
+            { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
+            { name: "Value", type: "text" },
+            
+        ]
+        if (currentUserDetails.modifynode_authorized){
+            fields.push({ type: "control", width: 50 });
+        }
         if ($("#secondaryNodeProperties").is(":visible")){
             $("#secondaryNodeProperties").jsGrid({
                 width: "100%",
                 height: "100%",
 
-                inserting: true,
-                editing: true,
+                inserting: false,
+                editing: false,
                 sorting: false,
                 paging: false,
 
                 data: nodePropertiesTable,
-                fields: [
-                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
-                { name: "Value", type: "text" },
-                { type: "control", width: 50 }
-                ]
+                fields:fields
             });
             $("#secondaryiriannunciator").html("Properties for " +iri);
             $("#secondaryNodeProperties").jsGrid("refresh");
+            $(".primaryNode").height('40%');
+            $(".secondaryNode").height('40%');
         }
         else {
             $("#primaryNodeProperties").jsGrid({
                 width: "100%",
                 height: "100%",
 
-                inserting: true,
-                editing: true,
+                inserting: inserting,
+                editing: editing,
                 sorting: false,
                 paging: false,
 
                 data: nodePropertiesTable,
-                fields: [
-                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
-                { name: "Value", type: "text" },
-                { type: "control", width: 50 }
-                ]
+                fields:fields
             });
             $("#primaryiriannunciator").html("Properties for " +iri);
             $("#primaryNodeProperties").jsGrid("refresh");
-            $("#savenode").show();
+
             $("#savenewnode").hide();
+            $(".primaryNode").show();
+            $(".primaryNode").height('100%');
+            
+        }
+        if(!$("#createrelationship").is(":visible")){
+            $("#cancelnewrelations").click();
         }
     }
 
@@ -367,7 +493,7 @@ function Neod3Renderer() {
             .relationships(links);
         var graphView = neo.graphView()
             .style(styleSheet)
-            .width($container.width()).height($container.height()).on('nodeClicked', nodeClickedHandler).on('relationshipClicked', dummyFunc).on('nodeDblClicked', dummyFunc);
+            .width($container.width()).height($container.height()).on('nodeClicked', nodeClickedHandler).on('relationshipClicked', relationshipClickedHandler).on('nodeDblClicked', dummyFunc);
         var svg = d3.select("#" + id).append("svg");
         var renderer = svg.data([graphModel]);
         //legend(svg,existingStyles);
