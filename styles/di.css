@@ -1,0 +1,43 @@
+#diAPIUsername, #diAPIPassword, #diAPISubmit,input[type=submit] {
+	color: black !important;
+}
+
+#authStatus {
+	color: white !important;
+	font-size: 0.8em;
+}
+.ontodisplay, .ontomanage {
+	padding: 5px;
+}
+#term, #tabpanel {
+	width:90% !important;
+}
+
+.ontomanage {
+	width:30% !important;
+	background-color:#f3ece7;
+}
+
+/*
+input[type="button"], input[type="submit"]{ background: #c8c6e8; text-align: center; padding: 3px; cursor:pointer;
+                text-shadow:1px 1px 2px rgba(255,255,255,1);font-weight:normal;
+                text-transform:uppercase;
+                color:#111111;letter-spacing:1pt;
+                word-spacing:2pt;font-size:7px;font-family:georgia, serif;line-height:1;
+                margin: 2px;
+                margin-top: 2px;
+                border: 1px solid #cac8c8;;
+                border-radius: 4px;
+                box-shadow: 2px 2px 3px #8f8383;
+}
+*/
+.jsgrid-header-row>.jsgrid-header-cell{
+	font-size: 0.85em;
+}
+
+body, text {
+	font-family: Georgia;
+}
+text {
+	font-size:0.75em;
+}
