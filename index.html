@@ -1,5 +1,6 @@
 <html>
 <head>
+  <link rel="shortcut icon" href="http://www.ranchobiosciences.com/wp-content/uploads/2016/04/Rancho-map.png" />
   <link rel="stylesheet" href="styles/codemirror.css">
   <link rel="stylesheet" href="styles/codemirror-neo.css">
   <link rel="stylesheet" href="styles/cy2neo.css">
@@ -11,6 +12,7 @@
   <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
   <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+  <link rel="stylesheet" href="styles/di.css">
   <title>Cy2NeoD3 - Tiny Neo4j Cypher Workbench</title>
 </head>
 
@@ -46,54 +48,65 @@ function getParameterByName(name, url) {
 
 </script>
 <body>
-	<div class="authentication">
+<div class="authentication" style="background-color: #212831;">
+		<div class="logo" style="padding-top:15px;width:'25%'; float:left;"><a id="dnn_dnnLogo_hypLogo" title="Digital Infuzion - Home Page" href="http://www.digitalinfuzion.com/Home.aspx">
+			<img id="dnn_dnnLogo_imgLogo" src="http://www.digitalinfuzion.com/Portals/0/Logo.png?ver=2015-10-29-163414-967" alt="Digital Infuzion - Home Page" /></a>
+		</div>
+		<div style="float:right;padding-top: 15px; color: white; font-size:0.75em;">
 		<form id="diAPILoginForm" method="post">
-			<div id="credentials">
-				<font size="1">Username:<input type="text" name="username" id="diAPIUsername" ></font>
-				<font size="1">Password:<input type="password" name="password" id="diAPIPassword" ></font>
-				<font size="1"><input type="submit" value="Submit"></font>
-			</div>
+			<!-- div id="credentials" -->
+				Username: &nbsp; <input type="text" name="username" id="diAPIUsername">
+				Password: &nbsp; <input type="password" name="password" id="diAPIPassword" >
+				<input type="submit" value="Submit" id="diAPISubmit">
+			<!-- /div -->
 		</form>
-		<div id="authStatus"></div>
-	</div>
-	<div class="ontomanage">
+		</div>
+		<div id="authStatus" style="color:white; float:right;"></div>
+</div>
+<div class="ontomanage">
 
-		<div class="nodeControls">
-			<form>
+		<div class="nodeControls" align="right">
+			<form name="nodes" id="nodes">
 				<input class="createnode" type="button" id="createnodebtn" onclick="createNodeBtnPressed()" value="Create New Node"/>
-				<input class="deletenode" type="button" id="deletenodebtn" onclick="deleteNodeBtnPressed()" value="Delete Node"/>
 				<input class="mngreltns" type="button" id="mngreltnsbtn" onclick="displayCreateRelationshipControls()" value="Create A Relationship"/>
+				<input class="deletenode" type="button" id="deletenodebtn" onclick="deleteNodeBtnPressed()" value="Delete Node"/>
 			</form>
 		</div>
-		<div class="primaryNode">
+		<div class="primaryNode" align="right">
+			<form>
 			<input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
 			<input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
+			
 			<div id="primaryiriannunciator"></div>
 			<div id="primaryNodeProperties"></div>
+			</form>
 		</div>
 
 
 
 		<div class="relationshipControl">
+			<form>
 			<select id="relationshipDropdown"></select> 
 			<input class="createrelationship" type="button" id="createrelationship" value="Create Relationship"/>
 			<input class="modifyrelationship" type="button" id="modifyrelationship" value="Modify relationship"/>
 			<input class="deleterelationship" type="button" id="deleterelationship" value="Delete relationship"/>
 			<input class="cancelnewrelations" type="button" id="cancelnewrelations" value="cancel"/>
+			
 		</div>
 		<div class="secondaryNode">
 			<div id="secondaryiriannunciator"></div>
 			<div id="secondaryNodeProperties"></div>
 
 		</div>
-
+		</form>
 	</div>  
 	<div class="ontodisplay">
+	Search for:
 		<div>
 			<form>
-				<input class="form-control" type="hidden" value="http://ns527777.ip-149-56-18.net:8085/DIOntoManager" id="neo4jUrl"/><br/>
+				<input class="form-control" type="hidden" value="http://ns527777.ip-149-56-18.net:8085/DIOntoManager" id="neo4jUrl"/>
 				<input class="form-control" type="hidden" size="8" value="neo4j" id="neo4jUser"/>
-				<input class="form-control" type="hidden" size="8" placeholder="password" value="test" id="neo4jPass"/><br/>
+				<input class="form-control" type="hidden" size="8" placeholder="password" value="test" id="neo4jPass"/>
 
 				<textarea name="cypher" id="cypher" rows="4" cols="120" data-lang="cypher" class="code form-control">
 				</textarea>
@@ -103,14 +116,18 @@ function getParameterByName(name, url) {
 			</form>
 		</div>
 
-		<div role="tabpanel">
+		<div id="tabpanel" role="tabpanel">
+			
 			<form action="">
-				<input type="radio" name="searchmethod" value="labelSearch" checked="checked"> Search By label
-				<input type="radio" name="searchmethod" value="bsveSearch" >BSVE Search
-				<div id="authenticatedSearchOptions"> 
-					<input type="radio" name="searchmethod" value="iriSearch" > Search By iri
-					<input type="radio" name="searchmethod" value="BSVEIRISearch" > Search By BSVE iri (Use * to get all BSVE Nodes)
+				<div id="authenticatedSearchOptions" style="float:right; padding-left:5px;font-size:0.9em;"> 
+					<input type="radio" name="searchmethod" value="iriSearch" > Search by IRI
+					<input type="radio" name="searchmethod" value="BSVEIRISearch" > Search by BSVE IRI (Use * to get all BSVE Nodes)
 				</div>
+				<div style="float:right; padding-left:5px; font-size:0.9em;"> 
+					<input type="radio" name="searchmethod" value="labelSearch" checked="checked"> Search by Label
+					<input type="radio" name="searchmethod" value="bsveSearch" >BSVE Search &nbsp;
+				</div>	
+				
 			</form>
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs" role="tablist">
@@ -173,7 +190,7 @@ function getParameterByName(name, url) {
          currentUserDetails=data;
           $('#diAPILoginForm').hide();
           $('.relationshipControl').hide();
-          $('#authStatus').html("<font size=\"1\">Welcome " + currentUserDetails.User + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
+          $('#authStatus').html("Welcome " + currentUserDetails.User + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)");
           $('#authStatus').show();
           if (currentUserDetails.viewnode_authorized){
           	getValidNodeProperties();
@@ -753,5 +770,8 @@ function getParameterByName(name, url) {
 </script>
 <div id="syn" style="display:none; background-color:rgba(250, 250, 250, 0.9);" onClick="this.style='display:none;'"> </div>
 </div>
+</div>
+</div>
+<div style="position:absolute; bottom: 10px; padding:10px; font-size:0.5em;" width="100%" align="right">powered by <a href="http://www.ranchobiosciences.com"><img src="http://www.ranchobiosciences.com/wp-content/uploads/2016/01/Rancho.png" height="25" alt="Rancho BioSciences"></a></div>
 </body>
 </html>
