@@ -104,7 +104,7 @@ function getParameterByName(name, url) {
 	Search for:
 		<div>
 			<form>
-				<input class="form-control" type="hidden" value="http://ns527777.ip-149-56-18.net:8085/DIOntoManager" id="neo4jUrl"/>
+				<input class="form-control" type="hidden" value="" id="neo4jUrl"/>
 				<input class="form-control" type="hidden" size="8" value="neo4j" id="neo4jUser"/>
 				<input class="form-control" type="hidden" size="8" placeholder="password" value="test" id="neo4jPass"/>
 
@@ -167,6 +167,7 @@ function getParameterByName(name, url) {
    	var currentUserDetails={};
   $(document).ready(function() {
     document.getElementById("term").value=getParameterByName("term");
+    $("input[id=neo4jUrl]").val(apiServer + "/DIOntoManager");
     makeCy();
     $(".secondaryNode").hide();
    // $(".primaryNode").hide();
