@@ -17,7 +17,8 @@
     </head>
 
     <script>
-        var apiServer="http://ns527777.ip-149-56-18.net:8085";
+        //var apiServer="http://ns527777.ip-149-56-18.net:8085";
+        var apiServer="http://10.33.36.143:8081";
         var validNodeProperties;
         function runScript(e) {
             if (e.keyCode == 13) {
@@ -170,6 +171,7 @@
                 var relationshipIRI="";
                 var currentUserDetails={};
                 var allUserData = [];
+                var gridOptions ={};
                 $(document).ready(function() {
                     document.getElementById("term").value=getParameterByName("term");
                     $("input[id=neo4jUrl]").val(apiServer + "/DIOntoManager");
@@ -224,9 +226,11 @@
                     var columnDefinitions = [
                         {
                             headerName: "Date",
-                            field: "Date",
+                            field: "date",
                             editable: false,
                             filter: 'date',
+                            minWidth: 110,
+                            width:110,
                             filterParams:{
                                 comparator:function (filterLocalDateAtMidnight, cellValue){
                                     var dateAsString = cellValue;
@@ -250,31 +254,46 @@
                             menuTabs:['filterMenuTab']
                         },
                         {
-                            headerName: "Cypher Query", field: "username", editable: false, filter: 'text', suppressToolPanel: true, menuTabs:['filterMenuTab']
+                            headerName: "Cypher Query",
+                            field: "cypherquery",
+                            editable: false,
+                            filter: 'text',
+                            suppressToolPanel: true,
+                            minWidth: 200,
+                            width: 374,
+                            cellStyle: {'white-space': 'normal'},
+                            menuTabs:['filterMenuTab']
                         },
                         {
-                            headerName: "User", field: "username", editable: false, filter: 'text', suppressToolPanel: true, menuTabs:['filterMenuTab']
+                            headerName: "User", field: "user", editable: false, filter: 'text', minWidth: 70, width: 70, suppressToolPanel: true, menuTabs:['filterMenuTab']
                         },
                     ];
                     
-                    var gridOptions = {
+                    gridOptions = {
                         enableSorting: true,
                         pagination: true,
                         enableFilter: true,
+                        enableColResize: true,
+                        getRowHeight: function(params) {
+                            return 18 * (Math.floor(params.data.cypherquery.length / 24) + 1);
+                        },
+                        
                         rowData: allUserData,
                         columnDefs: columnDefinitions,
                     }; 
                     
                     var gridDiv = $('#audittrailgrid')[0];
                     new agGrid.Grid(gridDiv, gridOptions);
-                    gridOptions.api.sizeColumnsToFit();
+                    
+                    gridOptions.api.addEventListener("gridSizeChanged", auditTrailGridSizeChangedHandler);
 
                     var config = {}
                     var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
                     new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
                 });
-
-
+                function auditTrailGridSizeChangedHandler(){
+                    gridOptions.api.sizeColumnsToFit();
+                }
 
                 function changeToUnAuthenticatedDisplay(){
                     $(".nodeControls").hide();
@@ -526,6 +545,24 @@
                     $(".primaryNode").hide();
                     $(".primaryNode").hide();
                     $(".auditTrail").show();
+                    $.ajax({
+                        url: apiServer+'/DIOntoManager/api/neo4j/audittrail/view',
+                        type: 'GET',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function(data){
+                            gridOptions.api.setRowData(JSON.parse(data));
+                            //console.log("Create node query is " + requestBodyString);
+                                    //$("#secondaryiriannunciator").html("");
+                        },
+                        error: function(xhr, status, error){
+                            alert(xhr.statusText);
+                            console.log(xhr.statusText + xhr.status);
+                            //var err =JSON.parse(xhr.responseText);
+                            //alert(err.Message);
+                        }
+                    });
                 }
 
                 function closeAuditTrailBtnPressed(){
