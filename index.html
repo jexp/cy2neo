@@ -99,7 +99,7 @@
 
             <div class="auditTrail">
                 <form>
-                    <input class="applyaudittrail" type="button" id="applyaudittrail" value="Apply Audit Trail"/>
+                    <input class="applyaudittrail" type="button" id="applyaudittrail" onclick="applyAuditTrailBtnPressed()" value="Apply Audit Trail"/>
                     <input class="closeaudittrail" type="button" id="closeaudittrail" onclick="closeAuditTrailBtnPressed()" value="Close"/>
                 </form>
                 <div id="audittrailgrid" style="height: 100%; width:100%" class="ag-theme-fresh"></div>
@@ -443,6 +443,24 @@
                     else {
             		  alert("Please select a subject node for the relationship");
             	   }
+                }
+
+                function applyAuditTrailBtnPressed(){
+                    $.ajax({
+                        url: apiServer+'/DIOntoManager/api/neo4j/audittrail/apply',
+                        type: 'GET',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function(data){
+                            //alert(data);
+                            alert(JSON.stringify(JSON.parse(data), null, 4));
+                        },
+
+                        error: function(err) {
+                            alert (err.status);
+                        }
+                    });
                 }
 
                 function saveNode(){
