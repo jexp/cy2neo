@@ -429,6 +429,7 @@
                 };
 
                 function displayCreateRelationshipControls(){
+                    closeAuditTrailBtnPressed();
                     if($("#savenode").is(":visible")){
                         initManageRelationshipControls();
                         $(".secondaryNode").show();
@@ -570,6 +571,7 @@
                 }
 
                 function deleteNodeBtnPressed(){
+                    closeAuditTrailBtnPressed();
                     if($("#savenode").is(":visible")){
                         if (confirm("Please confirm deletion of " + $("#primaryiriannunciator").html().substring(15)) == true) {
                             //alert ("we will delete " + $("#primaryiriannunciator").html().substring(15));
@@ -609,6 +611,7 @@
 
                 function createNodeBtnPressed(){
                     initializeCreateNodeControls();
+                    closeAuditTrailBtnPressed();
                     $("#primaryNodeProperties").jsGrid({
                         width: "100%",
                         height: "100%",
