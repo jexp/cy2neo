@@ -64,8 +64,6 @@
             <div class="nodeControls" align="right">
                 <form name="nodes" id="nodes">
                     <input class="createnode" type="button" id="createnodebtn" onclick="createNodeBtnPressed()" value="Create New Node"/>
-                    <input class="mngreltns" type="button" id="mngreltnsbtn" onclick="displayCreateRelationshipControls()" value="Create A Relationship"/>
-                    <input class="deletenode" type="button" id="deletenodebtn" onclick="deleteNodeBtnPressed()" value="Delete Node"/>
                     <input class="showaudittrail" type="button" id="showaudittrail" onclick="showAuditTrailBtnPressed()" value="Audit Trail"/>
                 </form>
             </div>
@@ -73,7 +71,9 @@
             <div class="primaryNode" align="right">
                 <form>
                     <input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
+                    <input class="deletenode" type="button" id="deletenodebtn" onclick="deleteNodeBtnPressed()" value="Delete Node"/>
                     <input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
+                    <input class="mngreltns" type="button" id="mngreltnsbtn" onclick="displayCreateRelationshipControls()" value="Create A Relationship"/>
 
                     <div id="primaryiriannunciator"></div>
                     <div id="primaryNodeProperties"></div>
@@ -181,6 +181,8 @@
                     $(".relationshipControl").hide();
                     $("#savenode").hide();
                     $("#savenewnode").hide();
+                    $("#deletenodebtn").hide();
+                    $("#mngreltnsbtn").hide();
                     $(".auditTrail").hide();
 
 
@@ -304,6 +306,8 @@
                 function changeToViewerUserUI(){
                     $(".nodeControls").hide();
                     $("#savenode").hide();
+                    $("#deletenodebtn").hide();
+                    $("#mngreltnsbtn").hide();
                     $(".relationshipControl").hide();
                     $("#authenticatedSearchOptions").show();
                     $("#primaryNodeProperties").jsGrid({
@@ -437,6 +441,8 @@
                         $("#modifyrelationship").hide();
                         $("#deleterelationship").hide();
                         $("#savenode").hide();
+                        $("#deletenodebtn").hide();
+                        $("#mngreltnsbtn").hide();
                         $(".primaryNode").height('40%');
                         $(".secondaryNode").height('40%');
                     }
@@ -550,6 +556,8 @@
 
                 function initializeCreateNodeControls(){
                     $("#savenode").hide();
+                    $("#deletenodebtn").hide();
+                    $("#mngreltnsbtn").hide();
                     $("#savenewnode").show();
                     $(".secondaryNode").hide();
                     $(".relationshipControl").hide();
@@ -671,6 +679,8 @@
                                 ]
                             });
                             $("#savenode").hide();
+                            $("#deletenodebtn").hide();
+                            $("#mngreltnsbtn").hide();
                             $("#savenewnode").show();
                             $(".secondaryNode").hide();
                             $(".relationshipControl").hide();
@@ -804,6 +814,8 @@
                     $(".secondaryNode").hide();
                     $(".relationshipControl").hide();
                     $("#savenode").show();
+                    $("#deletenodebtn").show();
+                    $("#mngreltnsbtn").show();
                     $("#secondaryNodeProperties").jsGrid("refresh");
                 });
 
@@ -830,9 +842,14 @@
                     $(".relationshipControl").hide();
                     if(currentUserDetails.modifynode_authorized){
                         $("#savenode").show();
+                        $("#deletenodebtn").show();
+                        $("#mngreltnsbtn").show();
+
                     }
                     else{
                         $("#savenode").hide();
+                        $("#deletenodebtn").hide();
+                        $("#mngreltnsbtn").hide();
                     }
                     $("#secondaryNodeProperties").jsGrid("refresh");
                     $("#secondaryiriannunciator").html("");
