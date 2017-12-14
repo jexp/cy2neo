@@ -101,6 +101,7 @@
                 <form>
                     <input class="applyaudittrail" type="button" id="applyaudittrail" onclick="applyAuditTrailBtnPressed()" value="Apply Audit Trail"/>
                     <input class="closeaudittrail" type="button" id="closeaudittrail" onclick="closeAuditTrailBtnPressed()" value="Close"/>
+                    <input class="downloadaudittrail" type="button" id="downloadaudittrail" onclick="downloadAuditTrailBtnPressed()" value="Download Last Audit Trail Replay Log"/>
                 </form>
                 <div id="audittrailgrid" style="height: 100%; width:100%" class="ag-theme-fresh"></div>
             </div>
@@ -459,14 +460,19 @@
                             withCredentials: true
                         },
                         success: function(data){
-                            //alert(data);
-                            alert(JSON.stringify(JSON.parse(data), null, 4));
+                            alert(data);
+                            //alert(JSON.stringify(JSON.parse(data), null, 4));
                         },
 
                         error: function(err) {
                             alert (err.status);
                         }
                     });
+                }
+
+                function downloadAuditTrailBtnPressed(){
+                    window.open(apiServer+'/DIOntoManager/api/neo4j/audittraillog/download');
+                    
                 }
 
                 function saveNode(){
