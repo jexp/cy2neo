@@ -145,6 +145,8 @@ function Neod3Renderer() {
             $("#primaryiriannunciator").html("Properties for " +subjectiri);
             $("#primaryNodeProperties").jsGrid("refresh");
             $("#savenode").hide();
+            $("#deletenodebtn").hide();
+            $("#mngreltnsbtn").hide();
             $("#savenewnode").hide();
 
             $("#relationshipDropdown").empty();

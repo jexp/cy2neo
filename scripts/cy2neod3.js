@@ -21,8 +21,8 @@ function Cy2NeoD3(config, graphId, tableId, sourceId, execId, urlSource, renderG
 			
 		var query = editor.getValue();
 		if (query!==""){
-			//console.log("checked value is "+document.querySelector('input[name="searchmethod"]:checked').value);
-			query=query+"&searchMethod="+document.querySelector('input[name="searchmethod"]:checked').value;
+			//console.log("checked value is "+document.querySelector('input[name="showallrelationships"]').checked);
+			query=query+"&searchMethod="+document.querySelector('input[name="searchmethod"]:checked').value+"&showAllRelationships="+document.querySelector('input[name="showallrelationships"]').checked;
 		}
 		console.log("Executing Query",query);
 		var execButton = $(this).find('i');
