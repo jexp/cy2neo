@@ -129,10 +129,14 @@
                         <input type="radio" name="searchmethod" value="iriSearch" > Search by IRI
                         <input type="radio" name="searchmethod" value="BSVEIRISearch" > Search by BSVE IRI (Use * to get all BSVE Nodes)
                     </div>
-                    <div style="float:right; padding-left:5px; font-size:0.9em;"> 
+                    <div style="float:right; padding-left:5px; font-size:0.9em;">
+
                         <input type="radio" name="searchmethod" value="labelSearch" checked="checked"> Search by Label
                         <input type="radio" name="searchmethod" value="bsveSearch" >BSVE Search &nbsp;
                     </div>	
+                    <div id="showAllRelationshipsOption">
+                        <input type="checkbox" name="showallrelationships" value="true"> Show All Relationships<br> 
+                    </div>
 
                 </form>
                 <!-- Nav tabs -->
@@ -211,6 +215,9 @@
                                 }
                                 else {
                                     changeToModifierUserUI();
+                                    if (currentUserDetails.auditReplayRequired){
+                                        alert ("An update to the underlying BSVE ontology has been detected.\n Please apply the Audit trail to bring the graph database up to date");
+                                    }
                                 }
 
                             }
@@ -888,6 +895,9 @@
                                     $(".ontodisplay").width("65%");
                                     if(currentUserDetails.modifynode_authorized){
                       		            changeToModifierUserUI();
+                                        if (currentUserDetails.auditReplayRequired){
+                                            alert ("An update to the underlying BSVE ontology has been detected.\n Please apply the Audit trail to bring the graph database up to date");
+                                        }
                                     }
                                     else{
                                         changeToViewerUserUI();
