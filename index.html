@@ -91,7 +91,7 @@
                         <input class="cancelnewrelations" type="button" id="cancelnewrelations" value="cancel"/>
                 </form>
             </div>
-            <div class="secondaryNode">
+            <div class="secondaryNode" align="right">
                 <div id="secondaryiriannunciator"></div>
                 <div id="secondaryNodeProperties"></div>
 
@@ -581,9 +581,8 @@
 
                 function showAuditTrailBtnPressed(){
                     $(".primaryNode").hide();
-                    $(".relationshipControl").hide();
-                    $(".primaryNode").hide();
-                    $(".primaryNode").hide();
+                    $("#cancelnewrelations").click();
+                    
                     $(".auditTrail").show();
                     $.ajax({
                         url: apiServer+'/DIOntoManager/api/neo4j/audittrail/view',

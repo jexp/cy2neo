@@ -69,64 +69,65 @@ function Neod3Renderer() {
 
     function relationshipClickedHandler(relationship){
         if (currentUserDetails.modifynode_authorized){
-        var subjectNode = relationship.source.propertyMap;
-        relationshipIRI = relationship.type;
-        var objectNode = relationship.target.propertyMap;
-        var subjectNodePropertiesTable = [];
-        var objectNodePropertiesTable = [];
-        var subjectiri = "";
-        var objectiri = "";
-        for (var key in subjectNode){
-            var subjectNodeProperty = {}
-            if (key.toLowerCase()!=="iri"){
-                subjectNodeProperty["Property"] = key;
-                if (subjectNode[key].constructor !== Array){
-                    subjectNodeProperty["Value"] = subjectNode[key];
-                }
-                else {
-                    for (var i = 0; i < subjectNode[key].length; i++){
-                        if (i==0){
-                            subjectNodeProperty["Value"] = subjectNode[key][i];
-                        }
-                        else{
-                            subjectNodeProperty["Value"] = subjectNodeProperty["Value"] + "<br>" +subjectNode[key][i];
+            closeAuditTrailBtnPressed();
+            var subjectNode = relationship.source.propertyMap;
+            relationshipIRI = relationship.type;
+            var objectNode = relationship.target.propertyMap;
+            var subjectNodePropertiesTable = [];
+            var objectNodePropertiesTable = [];
+            var subjectiri = "";
+            var objectiri = "";
+            for (var key in subjectNode){
+                var subjectNodeProperty = {}
+                if (key.toLowerCase()!=="iri"){
+                    subjectNodeProperty["Property"] = key;
+                    if (subjectNode[key].constructor !== Array){
+                        subjectNodeProperty["Value"] = subjectNode[key];
+                    }
+                    else {
+                        for (var i = 0; i < subjectNode[key].length; i++){
+                            if (i==0){
+                                subjectNodeProperty["Value"] = subjectNode[key][i];
+                            }
+                            else{
+                                subjectNodeProperty["Value"] = subjectNodeProperty["Value"] + "<br>" +subjectNode[key][i];
+                            }
                         }
                     }
+                    subjectNodePropertiesTable.push(subjectNodeProperty);
                 }
-                subjectNodePropertiesTable.push(subjectNodeProperty);
+                else {
+                    subjectiri=subjectNode[key];
+                }
             }
-            else {
-                subjectiri=subjectNode[key];
-            }
-        }
 
-        for (var key in objectNode){
-            var objectNodeProperty = {}
-            if (key.toLowerCase()!=="iri"){
-                objectNodeProperty["Property"] = key;
-                if (objectNode[key].constructor !== Array){
-                    objectNodeProperty["Value"] = objectNode[key];
-                }
-                else {
-                    for (var i = 0; i < objectNode[key].length; i++){
-                        if (i==0){
-                            objectNodeProperty["Value"] = objectNode[key][i];
-                        }
-                        else{
-                            objectNodeProperty["Value"] = objectNodeProperty["Value"] + "<br>" +objectNode[key][i];
+            for (var key in objectNode){
+                var objectNodeProperty = {}
+                if (key.toLowerCase()!=="iri"){
+                    objectNodeProperty["Property"] = key;
+                    if (objectNode[key].constructor !== Array){
+                        objectNodeProperty["Value"] = objectNode[key];
+                    }
+                    else {
+                        for (var i = 0; i < objectNode[key].length; i++){
+                            if (i==0){
+                                objectNodeProperty["Value"] = objectNode[key][i];
+                            }
+                            else{
+                                objectNodeProperty["Value"] = objectNodeProperty["Value"] + "<br>" +objectNode[key][i];
+                            }
                         }
                     }
+                    objectNodePropertiesTable.push(objectNodeProperty);
                 }
-                objectNodePropertiesTable.push(objectNodeProperty);
+                else {
+                    objectiri=objectNode[key];
+                }
             }
-            else {
-                objectiri=objectNode[key];
-            }
-        }
         
 
 
-         $("#primaryNodeProperties").jsGrid({
+            $("#primaryNodeProperties").jsGrid({
                 width: "100%",
                 height: "100%",
 
@@ -142,8 +143,7 @@ function Neod3Renderer() {
                 
                 ]
             });
-            $("#primaryiriannunciator").html("Properties for " +subjectiri);
-            $("#primaryNodeProperties").jsGrid("refresh");
+            
             $("#savenode").hide();
             $("#deletenodebtn").hide();
             $("#mngreltnsbtn").hide();
@@ -155,13 +155,13 @@ function Neod3Renderer() {
                 text: relationshipIRI
             }));
              //$(".relationshipControl").show();
-        $("#createrelationship").hide();
-        $("#modifyrelationship").show();
-        $("#deleterelationship").show();
-        initManageRelationshipControls(relationshipIRI);
+            $("#createrelationship").hide();
+            $("#modifyrelationship").show();
+            $("#deleterelationship").show();
+            initManageRelationshipControls(relationshipIRI);
 
         
-        $("#secondaryNodeProperties").jsGrid({
+            $("#secondaryNodeProperties").jsGrid({
                 width: "100%",
                 height: "100%",
 
@@ -172,17 +172,18 @@ function Neod3Renderer() {
 
                 data: objectNodePropertiesTable,
                 fields: [
-                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
-                { name: "Value", type: "text" },
+                    { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
+                    { name: "Value", type: "text" },
                 
                 ]
             });
             $("#secondaryiriannunciator").html("Properties for " +objectiri);
             $("#secondaryNodeProperties").jsGrid("refresh");
+            $("#primaryiriannunciator").html("Properties for " +subjectiri);
+            $("#primaryNodeProperties").jsGrid("refresh");
             $(".primaryNode").height('40%');
             $(".secondaryNode").height('40%');
         }
-
     }
 
     function nodeClickedHandler(node){
@@ -279,6 +280,7 @@ function Neod3Renderer() {
             
         ]
         if (currentUserDetails.modifynode_authorized){
+            closeAuditTrailBtnPressed();
             fields.push({ type: "control", width: 50 });
         }
         if ($("#secondaryNodeProperties").is(":visible")){
