@@ -283,7 +283,7 @@ function Neod3Renderer() {
             closeAuditTrailBtnPressed();
             fields.push({ type: "control", width: 50 });
         }
-        if ($("#secondaryNodeProperties").is(":visible")){
+        if ($("#secondaryNodeProperties").is(":visible") && $("#createrelationship").is(":visible")){
             $("#secondaryNodeProperties").jsGrid({
                 width: "100%",
                 height: "100%",
@@ -302,6 +302,9 @@ function Neod3Renderer() {
             $(".secondaryNode").height('40%');
         }
         else {
+            if(!$("#createrelationship").is(":visible")){
+                $("#cancelnewrelations").click();
+            }
             $("#primaryNodeProperties").jsGrid({
                 width: "100%",
                 height: "100%",
@@ -322,9 +325,7 @@ function Neod3Renderer() {
             $(".primaryNode").height('100%');
             
         }
-        if(!$("#createrelationship").is(":visible")){
-            $("#cancelnewrelations").click();
-        }
+        
     }
 
     function dummyFunc() {
