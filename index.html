@@ -17,14 +17,14 @@
     </head>
 
     <script>
-        var apiServer="http://ns527777.ip-149-56-18.net:8085";
-        //var apiServer="http://10.33.36.143:8081";
+        //var apiServer="http://ns527777.ip-149-56-18.net:8085";
+        var apiServer="http://10.33.36.143:8081";
         var validNodeProperties;
         function runScript(e) {
             if (e.keyCode == 13) {
                 var config = {}
                 var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-                new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+                new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                 return false;
             }
         }
@@ -298,7 +298,7 @@
 
                     var config = {}
                     var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-                    new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+                    new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                 });
                 function auditTrailGridSizeChangedHandler(){
                     gridOptions.api.sizeColumnsToFit();
@@ -507,7 +507,7 @@
                             console.log(data);
                             var config = {}
                             var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-                            new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+                            new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                         },
                         error: function(xhr, status, error){
                             alert(xhr.statusText);
@@ -549,7 +549,7 @@
                                 console.log(data);
                                 var config = {}
                                 var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-                                new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+                                new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                                 console.log("Create node query is " + requestBodyString);
                             },
                             error: function(xhr, status, error){
@@ -625,7 +625,7 @@
                                     alert(JSON.stringify(data));
                                     var config = {};
                                     var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-                                    new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+                                    new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                                     //console.log("Create node query is " + requestBodyString);
                                     //$("#secondaryiriannunciator").html("");
                                 },
@@ -727,7 +727,7 @@
                             console.log(data);
                             var config = {}
                             var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-                            new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+                            new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                             $("#cancelnewrelations").click();
                             //console.log("Create node query is " + requestBodyString);
                             //$("#secondaryiriannunciator").html("");
@@ -760,7 +760,7 @@
                             console.log(data);
                             var config = {}
                             var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-                            new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+                            new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                             $("#cancelnewrelations").click();
                             //console.log("Create node query is " + requestBodyString);
                        
@@ -792,7 +792,7 @@
                             console.log(data);
                             var config = {}
                             var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-                            new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
+                            new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                             //console.log("Create node query is " + requestBodyString);
                             //$("#secondaryiriannunciator").html("");
                         },

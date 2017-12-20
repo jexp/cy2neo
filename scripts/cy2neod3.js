@@ -1,4 +1,4 @@
-function Cy2NeoD3(config, graphId, tableId, sourceId, execId, urlSource, renderGraph, cbResult) {
+function Cy2NeoD3(config, graphId, tableId, sourceId, execId, urlSource, renderGraph, subclassSearchFlag, cbResult) {
     function createEditor() {
 		return CodeMirror.fromTextArea(document.getElementById(sourceId), {
 		  parserfile: ["codemirror-cypher.js"],
@@ -21,8 +21,15 @@ function Cy2NeoD3(config, graphId, tableId, sourceId, execId, urlSource, renderG
 			
 		var query = editor.getValue();
 		if (query!==""){
-			//console.log("checked value is "+document.querySelector('input[name="showallrelationships"]').checked);
-			query=query+"&searchMethod="+document.querySelector('input[name="searchmethod"]:checked').value+"&showAllRelationships="+document.querySelector('input[name="showallrelationships"]').checked;
+			if (!subclassSearchFlag){
+				console.log("not a dblclick seach");
+				//console.log("checked value is "+document.querySelector('input[name="showallrelationships"]').checked);
+				query=query+"&searchMethod="+document.querySelector('input[name="searchmethod"]:checked').value+"&showAllRelationships="+document.querySelector('input[name="showallrelationships"]').checked;
+			}
+			else {
+				console.log("IS A dblclick seach");
+				query=query+"&searchMethod=traversalSearch&showAllRelationships=false";
+			}
 		}
 		console.log("Executing Query",query);
 		var execButton = $(this).find('i');

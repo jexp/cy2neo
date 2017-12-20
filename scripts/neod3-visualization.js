@@ -186,6 +186,15 @@ function Neod3Renderer() {
         }
     }
 
+    function nodeDblClickedHandler(node){
+        var nodePropData = $.parseJSON(JSON.stringify(node));
+        console.log(nodePropData);
+        document.getElementById("cypher").value = nodePropData.label;
+        var config = {}
+        var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
+        new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection ,true, true);
+    }
+
     function nodeClickedHandler(node){
         var resultAssocArray = {};
         var result = "";
@@ -498,7 +507,7 @@ function Neod3Renderer() {
             .relationships(links);
         var graphView = neo.graphView()
             .style(styleSheet)
-            .width($container.width()).height($container.height()).on('nodeClicked', nodeClickedHandler).on('relationshipClicked', relationshipClickedHandler).on('nodeDblClicked', dummyFunc);
+            .width($container.width()).height($container.height()).on('nodeClicked', nodeClickedHandler).on('relationshipClicked', relationshipClickedHandler).on('nodeDblClicked', nodeDblClickedHandler);
         var svg = d3.select("#" + id).append("svg");
         var renderer = svg.data([graphModel]);
         //legend(svg,existingStyles);
