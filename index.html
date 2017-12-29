@@ -60,13 +60,28 @@
             <div id="authStatus" style="color:white; float:right;"></div>
         </div>
 
+        
+
         <div class="ontomanage">
+            
             <div class="nodeControls" align="right">
                 <form name="nodes" id="nodes">
                     <input class="createnode" type="button" id="createnodebtn" onclick="createNodeBtnPressed()" value="Create New Node"/>
                     <input class="showaudittrail" type="button" id="showaudittrail" onclick="showAuditTrailBtnPressed()" value="Audit Trail"/>
+                    <input class="showusersettings" type="button" id="showusersettings" onclick="showUserSettingsBtnPressed()" value="User Settings"/>
                 </form>
             </div>
+
+            <div class="usersettings">
+                
+                <div class="relationshipVisibilitySettings">
+                </div>
+                <div class="usersettingsbtns">
+                    <input class="saveusersettings" type="button" id="saveusersettings" onclick="saveUserSettingsBtnPressed()" value="Save User Settings"/>
+                    <input class="cancelusersettings" type="button" id="cancelusersettings" onclick="hideUserSettings()" value="Close"/>
+                </div>
+            </div>
+            
             
             <div class="primaryNode" align="right">
                 <form>
@@ -188,6 +203,7 @@
                     $("#deletenodebtn").hide();
                     $("#mngreltnsbtn").hide();
                     $(".auditTrail").hide();
+                    hideUserSettings();
 
 
                     $.ajax({
@@ -478,6 +494,10 @@
                     });
                 }
 
+                function hideUserSettings(){
+                    $(".usersettings").hide();
+                }
+
                 function downloadAuditTrailBtnPressed(){
                     window.open(apiServer+'/DIOntoManager/api/neo4j/audittraillog/download');
                     
@@ -580,9 +600,80 @@
                     $(".primaryNode").show();
                 }
 
+                function showUserSettingsBtnPressed(){
+                   // $(".ontomanage").hide();
+                    $(".relationshipVisibilitySettings").html("Loading settings...");
+                    $(".usersettingsbtns").hide();
+                    $(".usersettings").show();
+
+                    $.ajax({
+                        url: apiServer+'/DIOntoManager/api/neo4j/settings/get',
+                        type: 'GET',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function(data){
+                            var userOptions = JSON.parse(data);
+                            console.log(userOptions);
+                            var userSettingsHTML = '<h4>Show Relationships</h4>';
+                            for (var i=0; i<userOptions.length; i++){
+                                var checked = "";
+                                if (userOptions[i].visible){
+                                    checked = " checked";
+                                }
+                                
+                                userSettingsHTML = userSettingsHTML + '<input type="checkbox" name="'+userOptions[i].relationship +'" value="'+userOptions[i].relationship +'"' + checked +'> &nbsp;' +userOptions[i].relationship + ' <br>';
+                                //$(".usersettings").html('<input type="checkbox" name="'+userOptions[i].relationship +'" value="'+userOptions[i].relationship +' ' + checked +'">' +userOptions[i].relationship + ' <br>');
+                            }
+                            console.log(userSettingsHTML + '</form>');
+                            $(".relationshipVisibilitySettings").html(userSettingsHTML);
+                             $(".usersettingsbtns").show();
+                            //console.log("Create node query is " + requestBodyString);
+                                    //$("#secondaryiriannunciator").html("");
+                        },
+                        error: function(xhr, status, error){
+                            alert(xhr.statusText);
+                            console.log(xhr.statusText + xhr.status);
+                            //var err =JSON.parse(xhr.responseText);
+                            //alert(err.Message);
+                        }
+                    })
+                }
+
+                function saveUserSettingsBtnPressed(){
+                    var visibibleRelationships = "";
+                    $(".relationshipVisibilitySettings :input").each(function (index, data){
+                        console.log(data);
+                        if(data['checked']){
+                            visibibleRelationships =visibibleRelationships + '`'+data.value + '`' + "|";
+                        }
+                    })
+
+                    $.ajax({
+                        url: apiServer+'/DIOntoManager/api/neo4j/settings/save',
+                        type: 'POST',
+                        data: 'visibleRelationships='+visibibleRelationships+"&",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function(data){
+                           alert(data);
+                            //console.log("Create node query is " + requestBodyString);
+                                    //$("#secondaryiriannunciator").html("");
+                        },
+                        error: function(xhr, status, error){
+                            alert(xhr.statusText);
+                            console.log(xhr.statusText + xhr.status);
+                            //var err =JSON.parse(xhr.responseText);
+                            //alert(err.Message);
+                        }
+                    });
+                }
+
                 function showAuditTrailBtnPressed(){
                     $(".primaryNode").hide();
                     $("#cancelnewrelations").click();
+                    hideUserSettings();
                     
                     $(".auditTrail").show();
                     $.ajax({
@@ -651,6 +742,7 @@
                 function createNodeBtnPressed(){
                     initializeCreateNodeControls();
                     closeAuditTrailBtnPressed();
+                    hideUserSettings();
                     $("#primaryNodeProperties").jsGrid({
                         width: "100%",
                         height: "100%",
@@ -884,6 +976,7 @@
                             }
                             else {
                                 //getValidNodeProperties();
+                                hideUserSettings();
                                 currentUserDetails=data;
                      
                                 $('#diAPILoginForm').hide();

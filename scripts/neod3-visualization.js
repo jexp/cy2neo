@@ -70,6 +70,7 @@ function Neod3Renderer() {
     function relationshipClickedHandler(relationship){
         if (currentUserDetails.modifynode_authorized){
             closeAuditTrailBtnPressed();
+            hideUserSettings();
             var subjectNode = relationship.source.propertyMap;
             relationshipIRI = relationship.type;
             var objectNode = relationship.target.propertyMap;
@@ -187,6 +188,7 @@ function Neod3Renderer() {
     }
 
     function nodeDblClickedHandler(node){
+        hideUserSettings();
         var nodePropData = $.parseJSON(JSON.stringify(node));
         console.log(nodePropData);
         document.getElementById("cypher").value = nodePropData.label;
@@ -196,6 +198,7 @@ function Neod3Renderer() {
     }
 
     function nodeClickedHandler(node){
+        hideUserSettings();
         var resultAssocArray = {};
         var result = "";
         //var synonym = $.parseJSON(JSON.stringify(node))["synonym"];
