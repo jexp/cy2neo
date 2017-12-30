@@ -365,12 +365,13 @@ function Neod3Renderer() {
             var style = {};
             for (var i = 0; i < nodes.length; i++) {
                 var props= nodes[i].properties = extract_props(nodes[i]);
-                /*if (props.hasOwnProperty("http://www.w3.org/2000/01/rdf-schema#label")){
-                    props.rdflabel=props["http://www.w3.org/2000/01/rdf-schema#label"];
+                if (props.hasOwnProperty("http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel")) {
+                    props.label=props["http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel"];
                 }
-                else if (props.hasOwnProperty("http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel")) {
-                    props.rdflabel=props["http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel"];
-                }*/
+                else if (props.hasOwnProperty("http://www.w3.org/2000/01/rdf-schema#label")){
+                    props.label=props["http://www.w3.org/2000/01/rdf-schema#label"];
+                }
+                 
                 var keys = Object.keys(props);
                 if (label(nodes[i]) !== "" && keys.length > 0) {
                     var selected_keys = prio_props.filter(function (k) {
