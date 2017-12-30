@@ -513,7 +513,7 @@ function Neod3Renderer() {
             .width($container.width()).height($container.height()).on('nodeClicked', nodeClickedHandler).on('relationshipClicked', relationshipClickedHandler).on('nodeDblClicked', nodeDblClickedHandler);
         var svg = d3.select("#" + id).append("svg");
         var renderer = svg.data([graphModel]);
-        //legend(svg,existingStyles);
+        legend(svg,existingStyles);
         var zoomHandlers = {};
         var zoomBehavior = d3.behavior.zoom().on("zoom", applyZoom).scaleExtent([0.2, 8]);
 
