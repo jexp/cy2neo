@@ -318,6 +318,28 @@
                     var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
                     new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                 });
+
+                function checkIfUserTimedOut(messageIfNot){
+                    $.ajax({
+                        url: apiServer+'/DIOntoManager/api/user/authenticate',
+                        type: 'GET',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function(data){
+
+                            alert(messageIfNot);
+                        },
+                        error: function(){
+                            $(".ontomanage").hide();
+                            $(".ontodisplay").width("100%");
+                            changeToUnAuthenticatedDisplay();
+                            alert("Your session has timed out, please relog in to continue");
+                        }
+                    });
+
+                }
+
                 function auditTrailGridSizeChangedHandler(){
                     gridOptions.api.sizeColumnsToFit();
                 }
@@ -427,7 +449,8 @@
                         },
 
                         error: function(err) {
-                            alert (err.status)
+                            checkIfUserTimedOut(err.status);
+                            
                         }
                     });
                 }
@@ -489,7 +512,8 @@
                         },
 
                         error: function(err) {
-                            alert (err.status);
+                            checkIfUserTimedOut(err.status);
+                            
                         }
                     });
                 }
@@ -532,8 +556,9 @@
                             new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
                         },
                         error: function(xhr, status, error){
-                            alert(xhr.statusText);
-                            console.log(xhr.statusText);
+                            checkIfUserTimedOut(err.status);
+                            //alert(xhr.statusText);
+                            //console.log(xhr.statusText);
                             //var err =JSON.parse(xhr.responseText);
                             //alert(err.Message);
                         }
@@ -575,8 +600,9 @@
                                 console.log("Create node query is " + requestBodyString);
                             },
                             error: function(xhr, status, error){
-                                alert(xhr.statusText);
-                                console.log(xhr.statusText + xhr.status);
+                                checkIfUserTimedOut(err.status);
+                                //alert(xhr.statusText);
+                                //console.log(xhr.statusText + xhr.status);
                                 //var err =JSON.parse(xhr.responseText);
                                 //alert(err.Message);
                             }
@@ -632,8 +658,9 @@
                                     //$("#secondaryiriannunciator").html("");
                         },
                         error: function(xhr, status, error){
-                            alert(xhr.statusText);
-                            console.log(xhr.statusText + xhr.status);
+                            checkIfUserTimedOut(err.status);
+                            //alert(xhr.statusText);
+                            //console.log(xhr.statusText + xhr.status);
                             //var err =JSON.parse(xhr.responseText);
                             //alert(err.Message);
                         }
@@ -662,8 +689,9 @@
                                     //$("#secondaryiriannunciator").html("");
                         },
                         error: function(xhr, status, error){
-                            alert(xhr.statusText);
-                            console.log(xhr.statusText + xhr.status);
+                            checkIfUserTimedOut(err.status);
+                            //alert(xhr.statusText);
+                            //console.log(xhr.statusText + xhr.status);
                             //var err =JSON.parse(xhr.responseText);
                             //alert(err.Message);
                         }
@@ -688,8 +716,9 @@
                                     //$("#secondaryiriannunciator").html("");
                         },
                         error: function(xhr, status, error){
-                            alert(xhr.statusText);
-                            console.log(xhr.statusText + xhr.status);
+                            checkIfUserTimedOut(err.status);
+                            //alert(xhr.statusText);
+                            //console.log(xhr.statusText + xhr.status);
                             //var err =JSON.parse(xhr.responseText);
                             //alert(err.Message);
                         }
@@ -723,8 +752,9 @@
                                     //$("#secondaryiriannunciator").html("");
                                 },
                                 error: function(xhr, status, error){
-                      		        alert(xhr.statusText);
-                                    console.log(xhr.statusText + xhr.status);
+                                    checkIfUserTimedOut(err.status);
+                      		        //alert(xhr.statusText);
+                                    //console.log(xhr.statusText + xhr.status);
                                     //var err =JSON.parse(xhr.responseText);
                                     //alert(err.Message);
                                 }
@@ -795,7 +825,8 @@
                             $("#primaryNodeProperties").jsGrid("refresh");
                         },
                         error: function(xhr, status, error){
-                            alert(xhr.statusText);
+                            checkIfUserTimedOut(err.status);
+                            //alert(xhr.statusText);
                             //var err =JSON.parse(xhr.responseText);
                             //alert(err.Message);
                         }
@@ -827,8 +858,9 @@
                             //$("#secondaryiriannunciator").html("");
                         },
                         error: function(xhr, status, error){
-                            alert(xhr.statusText);
-                            console.log(xhr.statusText + xhr.status);
+                            checkIfUserTimedOut(err.status);
+                            //alert(xhr.statusText);
+                            //console.log(xhr.statusText + xhr.status);
                             //var err =JSON.parse(xhr.responseText);
                             //alert(err.Message);
                         }
@@ -860,8 +892,9 @@
                        
                         },
                         error: function(xhr, status, error){
-                            alert(xhr.statusText);
-                            console.log(xhr.statusText + xhr.status);
+                            checkIfUserTimedOut(err.status);
+                            //alert(xhr.statusText);
+                            //console.log(xhr.statusText + xhr.status);
                             //var err =JSON.parse(xhr.responseText);
                             //alert(err.Message);
                         }
@@ -891,8 +924,9 @@
                             //$("#secondaryiriannunciator").html("");
                         },
                         error: function(xhr, status, error){
-                            alert(xhr.statusText);
-                            console.log(xhr.statusText + xhr.status);
+                            checkIfUserTimedOut(err.status);
+                            //alert(xhr.statusText);
+                            //console.log(xhr.statusText + xhr.status);
                             //var err =JSON.parse(xhr.responseText);
                             //alert(err.Message);
                         }
