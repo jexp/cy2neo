@@ -25,7 +25,7 @@ function Neod3Renderer() {
           text-color-internal: #FFFFFF;\
         }\n";
 
-    var skip = ["id", "start", "end", "source", "target", "labels", "type", "selected","properties"];
+    var skip = ["id", "start", "end", "source", "target", "type", "selected","properties"];
     var prio_props = ["label","rdflabel",  "comment", "iri", "name", "title", "tag", "username", "lastname","caption"];
 
     var serializer = null;
@@ -317,6 +317,16 @@ function Neod3Renderer() {
             if(!$("#createrelationship").is(":visible")){
                 $("#cancelnewrelations").click();
             }
+            var nodeTypes = nodePropData.labels;
+            $("#nodeTypeSelectionDropdown").empty();
+            if (nodeTypes.length > 0){
+                $('#nodeTypeSelectionDropdown').append($('<option>', {
+                    value: -1,
+                    text: nodeTypes[0]
+                }));
+            }
+            $('#nodeTypeSelection').show();
+            initializeCreateNodeControls();
             $("#primaryNodeProperties").jsGrid({
                 width: "100%",
                 height: "100%",
@@ -345,6 +355,7 @@ function Neod3Renderer() {
 
     function render(id, $container, visualization) {
         function extract_props(pc) {
+            //console.log(pc);
             var p = {};
             for (var key in pc) {
                 if (!pc.hasOwnProperty(key) || skip.indexOf(key) != -1) continue;

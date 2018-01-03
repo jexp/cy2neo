@@ -95,7 +95,7 @@
                 <div id="primaryiriannunciator" align="right"></div>
                 <div id="nodeTypeSelection">
                     <div id="nodeTypeSelectionLabel">
-                        Select the type for your new node
+                        Node Type
                     </div>
                     <select id="nodeTypeSelectionDropdown"></select>            
                 </div>
@@ -408,7 +408,7 @@
                     $("#authenticatedSearchOptions").show();
                 }
 
-                function initManageRelationshipControls(relationshipType){
+                function initManageRelationshipControls(){
                     $("#relationshipDropdown").width("100%");
                     $(".secondaryNode").show();
                     $(".primaryNode").show();
@@ -430,11 +430,6 @@
                                return query;
                             },
                   		    processResults: function(data, params){
-                                for (i=0; i<data.length; i++){
-                                    if (data[i].text===relationshipType){
-                                        selectedRelationshipId=data[i].id;
-                  				  }
-                  			   };
                   			   return {
                   				  results: data
                   			   }
@@ -622,7 +617,7 @@
                 
                 }
 
-                function initializeCreateNodeControls(type){
+                function initializeCreateNodeControls(){
                     $("#savenode").hide();
                     $("#nodeTypeSelection").show();
                    
@@ -643,11 +638,7 @@
                                return query;
                             },
                             processResults: function(data, params){
-                                for (i=0; i<data.length; i++){
-                                    if (data[i].text===type){
-                                        selectedTypeId=data[i].id;
-                                    }
-                               };
+                                
                                return {
                                   results: data
                                }
