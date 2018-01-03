@@ -149,7 +149,7 @@ function Neod3Renderer() {
             $("#deletenodebtn").hide();
             $("#mngreltnsbtn").hide();
             $("#savenewnode").hide();
-
+            $("#nodeTypeSelection").hide();
             $("#relationshipDropdown").empty();
             $('#relationshipDropdown').append($('<option>', {
                 value: -1,

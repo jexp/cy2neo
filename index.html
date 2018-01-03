@@ -83,26 +83,34 @@
             </div>
             
             
-            <div class="primaryNode" align="right">
-                <form>
-                    <input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
-                    <input class="deletenode" type="button" id="deletenodebtn" onclick="deleteNodeBtnPressed()" value="Delete Node"/>
-                    <input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
-                    <input class="mngreltns" type="button" id="mngreltnsbtn" onclick="displayCreateRelationshipControls()" value="Create A Relationship"/>    
-                </form>
-                <div id="primaryiriannunciator"></div>
+            <div class="primaryNode">
+                <div align="right">
+                    <form>
+                        <input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
+                        <input class="deletenode" type="button" id="deletenodebtn" onclick="deleteNodeBtnPressed()" value="Delete Node"/>
+                        <input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
+                        <input class="mngreltns" type="button" id="mngreltnsbtn" onclick="displayCreateRelationshipControls()" value="Create A Relationship"/>    
+                    </form>
+                </div>
+                <div id="primaryiriannunciator" align="right"></div>
+                <div id="nodeTypeSelection">
+                    <div id="nodeTypeSelectionLabel">
+                        Select the type for your new node
+                    </div>
+                    <select id="nodeTypeSelectionDropdown"></select>            
+                </div>
                 <div id="primaryNodeProperties"></div>
             </div>
 
 
 
             <div class="relationshipControl">
+                <select id="relationshipDropdown"></select> 
                 <form>
-                    <select id="relationshipDropdown"></select> 
-                        <input class="createrelationship" type="button" id="createrelationship" value="Create Relationship"/>
-                        <input class="modifyrelationship" type="button" id="modifyrelationship" value="Modify relationship"/>
-                        <input class="deleterelationship" type="button" id="deleterelationship" value="Delete relationship"/>
-                        <input class="cancelnewrelations" type="button" id="cancelnewrelations" value="cancel"/>
+                    <input class="createrelationship" type="button" id="createrelationship" value="Create Relationship"/>
+                    <input class="modifyrelationship" type="button" id="modifyrelationship" value="Modify relationship"/>
+                    <input class="deleterelationship" type="button" id="deleterelationship" value="Delete relationship"/>
+                    <input class="cancelnewrelations" type="button" id="cancelnewrelations" value="cancel"/>
                 </form>
             </div>
             <div class="secondaryNode" align="right">
@@ -196,7 +204,7 @@
                     $("input[id=neo4jUrl]").val(apiServer + "/DIOntoManager");
                     makeCy();
                     $(".secondaryNode").hide();
-
+                    $("#nodeTypeSelection").hide();
                     $(".relationshipControl").hide();
                     $("#savenode").hide();
                     $("#savenewnode").hide();
@@ -401,7 +409,7 @@
                 }
 
                 function initManageRelationshipControls(relationshipType){
-                    $("#relationshipDropdown").width("40%");
+                    $("#relationshipDropdown").width("100%");
                     $(".secondaryNode").show();
                     $(".primaryNode").show();
                 
@@ -614,8 +622,38 @@
                 
                 }
 
-                function initializeCreateNodeControls(){
+                function initializeCreateNodeControls(type){
                     $("#savenode").hide();
+                    $("#nodeTypeSelection").show();
+                   
+                    $("#nodeTypeSelectionDropdown").select2({
+                        tags: true,
+                        ajax: {
+                            url: apiServer+'/DIOntoManager/api/neo4j/node/types/get',
+                            type: 'GET',
+                            dataType: 'json',
+                            xhrFields: {
+                              withCredentials: true
+                            },
+                            data: function (params) {
+                               console.log(params);
+                               var query = {
+                                   typeName: params.term,
+                               }
+                               return query;
+                            },
+                            processResults: function(data, params){
+                                for (i=0; i<data.length; i++){
+                                    if (data[i].text===type){
+                                        selectedTypeId=data[i].id;
+                                    }
+                               };
+                               return {
+                                  results: data
+                               }
+                            }
+                        }
+                    });
                     $("#deletenodebtn").hide();
                     $("#mngreltnsbtn").hide();
                     $("#savenewnode").show();
@@ -773,6 +811,7 @@
                     initializeCreateNodeControls();
                     closeAuditTrailBtnPressed();
                     hideUserSettings();
+                    
                     $("#primaryNodeProperties").jsGrid({
                         width: "100%",
                         height: "100%",
