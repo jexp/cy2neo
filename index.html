@@ -45,50 +45,44 @@
         }
 		
 		function mrgToggle(){
-			$("#merge_magic").toggle();
-			console.log($("#mrg_btn").text());
-			mt=$("#mrg_btn").text();
-			if (mt=='Merge new DOID') {$("#mrg_btn").text('Back to Ontology Management');} else {$("#mrg_btn").text('Merge new DOID');}
-			$("#ontodisplay").toggle();
-			//$("#mrg_btn").toggle();
-		}
+            $("#merge_magic").toggle();
+            $("#ontodisplay").toggle();
+            $($("#mrg_btn")).val($($("#mrg_btn")).val() === 'Merge new DOID' ? 'Back to Ontology' : 'Merge new DOID');
+        }
 		
-		function addRow(bsvev, doidv, idx)
-		{
-       if (!document.getElementsByTagName) return;
-       tabBody=document.getElementsByTagName("tbody").item(0);
-       row=document.createElement("tr");
-       cell1 = document.createElement("td");
-       cell1.setAttribute('id', "tdbsve" + idx);
-       cell2 = document.createElement("td");
-       cell2.setAttribute('id', "tddoid" + idx);
-       cell3 = document.createElement("td");
-       textnode1=document.createTextNode(bsvev);
-       textnode2=document.createTextNode(doidv);
-       select = document.createElement('select');
-       select.setAttribute('id', "selid" + idx);
-       option1 = document.createElement("option");
-       option1.setAttribute('value', "bsve");
-       option1.appendChild(document.createTextNode("BSVE"));
-       select.appendChild(option1);
-       option2 = document.createElement("option");
-       option2.setAttribute('value', "doid");
-       option2.appendChild(document.createTextNode("DOID"));
-       select.appendChild(option2);
-       //option3 = document.createElement("option");
-       //option3.setAttribute('value', "combine");
-       //option3.appendChild(document.createTextNode("Combine"));
-       //select.appendChild(option3);
-       cell1.appendChild(textnode1);
-       cell2.appendChild(textnode2);
-       cell3.appendChild(select)
-       row.appendChild(cell1);
-       row.appendChild(cell2);
-       row.appendChild(cell3);
-       tabBody.appendChild(row);
-}
-
-
+		function addRow(bsvev, doidv, idx){
+        if (!document.getElementsByTagName) return;
+            tabBody=document.getElementsByTagName("tbody").item(0);
+            row=document.createElement("tr");
+            cell1 = document.createElement("td");
+            cell1.setAttribute('id', "tdbsve" + idx);
+            cell2 = document.createElement("td");
+            cell2.setAttribute('id', "tddoid" + idx);
+            cell3 = document.createElement("td");
+            textnode1=document.createTextNode(bsvev);
+            textnode2=document.createTextNode(doidv);
+            select = document.createElement('select');
+            select.setAttribute('id', "selid" + idx);
+            option1 = document.createElement("option");
+            option1.setAttribute('value', "bsve");
+            option1.appendChild(document.createTextNode("BSVE"));
+            select.appendChild(option1);
+            option2 = document.createElement("option");
+            option2.setAttribute('value', "doid");
+            option2.appendChild(document.createTextNode("DOID"));
+            select.appendChild(option2);
+            //option3 = document.createElement("option");
+            //option3.setAttribute('value', "combine");
+            //option3.appendChild(document.createTextNode("Combine"));
+            //select.appendChild(option3);
+            cell1.appendChild(textnode1);
+            cell2.appendChild(textnode2);
+            cell3.appendChild(select)
+            row.appendChild(cell1);
+            row.appendChild(cell2);
+            row.appendChild(cell3);
+            tabBody.appendChild(row);
+        }
     </script>
     <body>
         <div class="authentication" style="background-color: #212831;">
