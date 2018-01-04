@@ -80,7 +80,7 @@ function Neod3Renderer() {
             var objectiri = "";
             for (var key in subjectNode){
                 var subjectNodeProperty = {}
-                if (key.toLowerCase()!=="iri"){
+                if (key.toLowerCase()!=="iri" && key.toLowerCase()!=="labels"){
                     subjectNodeProperty["Property"] = key;
                     if (subjectNode[key].constructor !== Array){
                         subjectNodeProperty["Value"] = subjectNode[key];
@@ -104,7 +104,7 @@ function Neod3Renderer() {
 
             for (var key in objectNode){
                 var objectNodeProperty = {}
-                if (key.toLowerCase()!=="iri"){
+                if (key.toLowerCase()!=="iri" && key.toLowerCase()!=="labels"){
                     objectNodeProperty["Property"] = key;
                     if (objectNode[key].constructor !== Array){
                         objectNodeProperty["Value"] = objectNode[key];
@@ -263,7 +263,7 @@ function Neod3Renderer() {
         var iri = "";
         for (var key in nodePropData){
             var nodeProperty = {}
-            if (key.toLowerCase()!=="iri"){
+            if (key.toLowerCase()!=="iri" && key.toLowerCase()!=="labels"){
                 nodeProperty["Property"] = key;
                 if (nodePropData[key].constructor !== Array){
                     nodeProperty["Value"] = nodePropData[key];
@@ -345,6 +345,9 @@ function Neod3Renderer() {
             $("#savenewnode").hide();
             $(".primaryNode").show();
             $(".primaryNode").height('100%');
+            $("#savenode").show();
+            $("#deletenodebtn").show();
+            $("#mngreltnsbtn").show();
             
         }
         

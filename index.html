@@ -544,7 +544,8 @@
                             }
                         }
                     }
-                    requestBodyString=requestBodyString+"iri="+$("#primaryiriannunciator").html().substring(15);
+                    requestBodyString=requestBodyString+"iri="+$("#primaryiriannunciator").html().substring(15)+"&";
+                    requestBodyString=requestBodyString+"nodetype="+$('#nodeTypeSelectionDropdown option:selected').text();
                     $.ajax({
                         url: apiServer+'/DIOntoManager/api/neo4j/node/modify',
                         type: 'POST',
@@ -584,6 +585,7 @@
                             }
                         }
                     }
+                    requestBodyString=requestBodyString+"nodetype="+$('#nodeTypeSelectionDropdown option:selected').text();
                     //requestBodyString=requestBodyString;
                     console.log("Request body is " + requestBodyString);
                     if (requestBodyString.trim()!==""){
