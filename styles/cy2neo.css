@@ -12,29 +12,62 @@ svg {
 }
 
 .ontomanage {
-   position:relative;
+   position:absolute;
    top:10%;
-   left:70%;
+   right:0;
    width:35%;
    height:100%;
+}
+
+#merge_magic {
+		font-family: Georgia !important;
+		position: absolute;
+		top: 10%;
+		padding:5px;
+		font-size:0.5em !important;
+		background-color:#f3ece7;
+}
+#merge_table, #difftable{
+		font-family: Georgia !important;
+		padding:5px !important;
+		border-spacing: 10px !important;
+		border: solid 1px!important;
+		font-size:1.5em !important;
+		width: 100%;
+}
+
+#merge_table th,#merge_table td,
+#difftable th,#difftable td {
+	border:solid #ddd 1px !important;
+}
+
+#btnMerge, #recordsnum {
+	font-size:1.5em !important;
+}
+
+#btnSubmit {
+	font-size:1.5em !important;
+}
+
+button:disabled, submit[disabled], submit:disabled,
+button[disabled],#btnSubmit:disabled
+{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
 }
 
 #credentials{
    text-align:right;
 }
 
-
-
 .authentication{
    position:absolute;
    width:100%;
-   height:10%;
    margin-right:2px;
    border: 4px;
    border-style: double;
 }
-
-
 
 #authStatus{
    text-align:right;
@@ -43,38 +76,21 @@ svg {
 .nodeControls{
    right:0;
    width:100%;
-   
+
    font-size:0.8em;
 }
 
-.primaryNode {
+.primaryNode, {
    position:relative;
-   
+
    width:100%;
    height:100%;
 }
-
-#nodeTypeSelectionDropdown{
-   width:100%;
-}
-
-#relationshipDropdown{
-   width:100% !important;
-}
-
-.usersettings {
-   position:relative;
-   z-index: 2 !important;
-   width:100%;
-   height:100%;
-}
-
-
 
 .secondaryNode {
    position:relative;
    top:30px;
-   
+
    width:100%;
    height:100%;
 }
@@ -88,7 +104,6 @@ svg {
 
 .relationshipControl{
    position:relative;
-   z-index: 3 !important;
    top:30px;
    width:100%;
    height:10%;
