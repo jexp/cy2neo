@@ -530,7 +530,7 @@ function saveNewNode(){
                 console.log("Create node query is " + requestBodyString);
             },
             error: function(xhr, status, error){
-                checkIfUserTimedOut(err.status);
+                checkIfUserTimedOut(error.status);
                 //alert(xhr.statusText);
                 //console.log(xhr.statusText + xhr.status);
                 //var err =JSON.parse(xhr.responseText);
@@ -614,7 +614,7 @@ function showUserSettingsBtnPressed(){
                     //$("#secondaryiriannunciator").html("");
         },
         error: function(xhr, status, error){
-            checkIfUserTimedOut(err.status);
+            checkIfUserTimedOut(error.status);
             //alert(xhr.statusText);
             //console.log(xhr.statusText + xhr.status);
             //var err =JSON.parse(xhr.responseText);
@@ -645,7 +645,7 @@ function saveUserSettingsBtnPressed(){
                     //$("#secondaryiriannunciator").html("");
         },
         error: function(xhr, status, error){
-            checkIfUserTimedOut(err.status);
+            checkIfUserTimedOut(error.status);
             //alert(xhr.statusText);
             //console.log(xhr.statusText + xhr.status);
             //var err =JSON.parse(xhr.responseText);
@@ -672,7 +672,7 @@ function showAuditTrailBtnPressed(){
                     //$("#secondaryiriannunciator").html("");
         },
         error: function(xhr, status, error){
-            checkIfUserTimedOut(err.status);
+            checkIfUserTimedOut(error.status);
             //alert(xhr.statusText);
             //console.log(xhr.statusText + xhr.status);
             //var err =JSON.parse(xhr.responseText);
@@ -708,7 +708,7 @@ function deleteNodeBtnPressed(){
                     //$("#secondaryiriannunciator").html("");
                 },
                 error: function(xhr, status, error){
-                    checkIfUserTimedOut(err.status);
+                    checkIfUserTimedOut(error.status);
       		        //alert(xhr.statusText);
                     //console.log(xhr.statusText + xhr.status);
                     //var err =JSON.parse(xhr.responseText);
@@ -782,7 +782,7 @@ function getlastindex(){
             $("#primaryNodeProperties").jsGrid("refresh");
         },
         error: function(xhr, status, error){
-            checkIfUserTimedOut(err.status);
+            checkIfUserTimedOut(error.status);
             //alert(xhr.statusText);
             //var err =JSON.parse(xhr.responseText);
             //alert(err.Message);
@@ -815,7 +815,7 @@ $("#deleterelationship").click(function(){
             //$("#secondaryiriannunciator").html("");
         },
         error: function(xhr, status, error){
-            checkIfUserTimedOut(err.status);
+            checkIfUserTimedOut(error.status);
             //alert(xhr.statusText);
             //console.log(xhr.statusText + xhr.status);
             //var err =JSON.parse(xhr.responseText);
@@ -849,7 +849,7 @@ $("#modifyrelationship").click(function(){
        
         },
         error: function(xhr, status, error){
-            checkIfUserTimedOut(err.status);
+            checkIfUserTimedOut(error.status);
             //alert(xhr.statusText);
             //console.log(xhr.statusText + xhr.status);
             //var err =JSON.parse(xhr.responseText);
@@ -881,7 +881,7 @@ $("#createrelationship").click(function(){
             //$("#secondaryiriannunciator").html("");
         },
         error: function(xhr, status, error){
-            checkIfUserTimedOut(err.status);
+            checkIfUserTimedOut(error.status);
             //alert(xhr.statusText);
             //console.log(xhr.statusText + xhr.status);
             //var err =JSON.parse(xhr.responseText);
