@@ -162,11 +162,12 @@ $(document).ready(function() {
                 }
                 else {
                     changeToModifierUserUI();
-                    if (currentUserDetails.doidUpdateAvailable) {
-                        alert ("A DOID update has been detected and downloaded.\nPlease merge with BSVE and apply the audit trail");
-                    } else if (currentUserDetails.auditReplayRequired){
+                    if (currentUserDetails.auditReplayRequired){
                         alert ("An update to the underlying BSVE ontology has been detected.\nPlease apply the Audit trail to bring the graph database up to date");
                     }
+                    else if (currentUserDetails.doidUpdateAvailable) {
+                        alert ("A DOID update has been detected and downloaded.\nPlease merge with BSVE and apply the audit trail");
+                    } 
                 }
 
             }
