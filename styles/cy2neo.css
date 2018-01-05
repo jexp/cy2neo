@@ -6,7 +6,7 @@ svg {
 
 .ontodisplay {
    position:absolute;
-   width:65%;
+   width:70% !important;
    top:10%;
    height:100%;
 }
@@ -15,7 +15,8 @@ svg {
    position:relative;
    top:10%;
    left:70%;
-   width:35%;
+   width:30% !important;
+   background-color:#f3ece7;
    height:100%;
 }
 
