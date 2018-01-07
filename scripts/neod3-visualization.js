@@ -97,7 +97,7 @@ function Neod3Renderer() {
                     }
                     subjectNodePropertiesTable.push(subjectNodeProperty);
                 }
-                else {
+                else if(key.toLowerCase()==="iri") {
                     subjectiri=subjectNode[key];
                 }
             }
@@ -121,7 +121,7 @@ function Neod3Renderer() {
                     }
                     objectNodePropertiesTable.push(objectNodeProperty);
                 }
-                else {
+                else if(key.toLowerCase()==="iri"){
                     objectiri=objectNode[key];
                 }
             }
@@ -280,7 +280,7 @@ function Neod3Renderer() {
                 }
                 nodePropertiesTable.push(nodeProperty);
             }
-            else {
+            else if(key.toLowerCase()==="iri"){
                 iri=nodePropData[key];
             }
         }
@@ -371,7 +371,7 @@ function Neod3Renderer() {
             function label(n) {
                 var labels = n["labels"];
                 if (labels && labels.length) {
-                    return labels[labels.length - 1];
+                    return labels[0];
                 }
                 return "";
             }
