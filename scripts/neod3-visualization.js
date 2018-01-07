@@ -385,6 +385,11 @@ function Neod3Renderer() {
                 else if (props.hasOwnProperty("http://www.w3.org/2000/01/rdf-schema#label")){
                     props.label=props["http://www.w3.org/2000/01/rdf-schema#label"];
                 }
+                else if (props.hasOwnProperty("http://www.w3.org/2002/07/owl#deprecated") && props["http://www.w3.org/2002/07/owl#deprecated"]) {
+                    if (props.hasOwnProperty("iri")){
+                        props.label=props.iri;
+                    }
+                }
                  
                 var keys = Object.keys(props);
                 if (label(nodes[i]) !== "" && keys.length > 0) {
