@@ -479,7 +479,7 @@ function saveNode(){
             withCredentials: true
         },
         success: function(data){
-            console.log(data);
+            alert(data);
             var config = {}
             var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
             new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
