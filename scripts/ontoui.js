@@ -268,6 +268,7 @@ function checkIfUserTimedOut(messageIfNot){
             $(".ontodisplay").width("100%");
             changeToUnAuthenticatedDisplay();
             alert("Your session has timed out, please relog in to continue");
+            location.reload();
         }
     });
 
@@ -290,7 +291,7 @@ function changeToViewerUserUI(){
     $("#mngreltnsbtn").hide();
     $(".relationshipControl").hide();
     $("#authenticatedSearchOptions").show();
-    $("#primaryNodeProperties").jsGrid({
+    /*$("#primaryNodeProperties").jsGrid({
         width: "100%",
         height: "100%",
 
@@ -324,7 +325,7 @@ function changeToViewerUserUI(){
     });
     
     $("#primaryNodeProperties").jsGrid("refresh");
-    $("#secondaryNodeProperties").jsGrid("refresh");
+    $("#secondaryNodeProperties").jsGrid("refresh");*/
     $(".secondaryNode").hide()
 }
 
@@ -397,6 +398,7 @@ function logout(){
             $(".ontomanage").hide();
             $(".ontodisplay").width("100%");
             changeToUnAuthenticatedDisplay();
+            location.reload();
         },
 
         error: function(err) {

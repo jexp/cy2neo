@@ -191,7 +191,12 @@ function Neod3Renderer() {
         hideUserSettings();
         var nodePropData = $.parseJSON(JSON.stringify(node));
         console.log(nodePropData);
-        document.getElementById("cypher").value = nodePropData.label;
+        if (nodePropData.hasOwnProperty("http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel")){
+            document.getElementById("cypher").value = nodePropData["http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel"];
+        }
+        else {
+            document.getElementById("cypher").value = nodePropData["http://www.w3.org/2000/01/rdf-schema#label"];
+        }
         var config = {}
         var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
         new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection ,true, true);
@@ -295,60 +300,63 @@ function Neod3Renderer() {
             closeAuditTrailBtnPressed();
             fields.push({ type: "control", width: 50 });
         }
-        if ($("#secondaryNodeProperties").is(":visible") && $("#createrelationship").is(":visible")){
-            $("#secondaryNodeProperties").jsGrid({
-                width: "100%",
-                height: "100%",
+        if (currentUserDetails.modifynode_authorized||currentUserDetails.viewnode_authorized){
+            if ($("#secondaryNodeProperties").is(":visible") && $("#createrelationship").is(":visible")){
+                $("#secondaryNodeProperties").jsGrid({
+                    width: "100%",
+                    height: "100%",
 
-                inserting: false,
-                editing: false,
-                sorting: false,
-                paging: false,
+                    inserting: false,
+                    editing: false,
+                    sorting: false,
+                    paging: false,
 
-                data: nodePropertiesTable,
-                fields:fields
-            });
-            $("#secondaryiriannunciator").html("Properties for " +iri);
-            $("#secondaryNodeProperties").jsGrid("refresh");
-            $(".primaryNode").height('40%');
-            $(".secondaryNode").height('40%');
-        }
-        else {
-            if(!$("#createrelationship").is(":visible")){
-                $("#cancelnewrelations").click();
+                    data: nodePropertiesTable,
+                    fields:fields
+                });
+                $("#secondaryiriannunciator").html("Properties for " +iri);
+                $("#secondaryNodeProperties").jsGrid("refresh");
+                $(".primaryNode").height('40%');
+                $(".secondaryNode").height('40%');
             }
-            var nodeTypes = nodePropData.labels;
-            $("#nodeTypeSelectionDropdown").empty();
-            if (nodeTypes.length > 0){
-                $('#nodeTypeSelectionDropdown').append($('<option>', {
-                    value: -1,
-                    text: nodeTypes[0]
-                }));
+            else {
+                if(!$("#createrelationship").is(":visible")){
+                    $("#cancelnewrelations").click();
+                }
+                var nodeTypes = nodePropData.labels;
+                $("#nodeTypeSelectionDropdown").empty();
+                if (nodeTypes.length > 0){
+                    $('#nodeTypeSelectionDropdown').append($('<option>', {
+                        value: -1,
+                        text: nodeTypes[0]
+                    }));
+                }
+                $('#nodeTypeSelection').show();
+                initializeCreateNodeControls();
+                $("#primaryNodeProperties").jsGrid({
+                    width: "100%",
+                    height: "100%",
+
+                    inserting: inserting,
+                    editing: editing,
+                    sorting: false,
+                    paging: false,
+
+                    data: nodePropertiesTable,
+                    fields:fields
+                });
+                $("#primaryiriannunciator").html("Properties for " +iri);
+                $("#primaryNodeProperties").jsGrid("refresh");
+
+                $("#savenewnode").hide();
+                $(".primaryNode").show();
+                $(".primaryNode").height('100%');
+                if (currentUserDetails.modifynode_authorized){
+                    $("#savenode").show();
+                    $("#deletenodebtn").show();
+                    $("#mngreltnsbtn").show();
+                }
             }
-            $('#nodeTypeSelection').show();
-            initializeCreateNodeControls();
-            $("#primaryNodeProperties").jsGrid({
-                width: "100%",
-                height: "100%",
-
-                inserting: inserting,
-                editing: editing,
-                sorting: false,
-                paging: false,
-
-                data: nodePropertiesTable,
-                fields:fields
-            });
-            $("#primaryiriannunciator").html("Properties for " +iri);
-            $("#primaryNodeProperties").jsGrid("refresh");
-
-            $("#savenewnode").hide();
-            $(".primaryNode").show();
-            $(".primaryNode").height('100%');
-            $("#savenode").show();
-            $("#deletenodebtn").show();
-            $("#mngreltnsbtn").show();
-            
         }
         
     }
