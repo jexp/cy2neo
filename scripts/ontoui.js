@@ -156,7 +156,7 @@ $(document).ready(function() {
                 getValidNodeProperties();
 
                 $(".ontomanage").show();
-                $(".ontodisplay").width("65%");
+                $(".ontodisplay").width("70%");
                 if (!currentUserDetails.modifynode_authorized){
                     changeToViewerUserUI();
                 }
@@ -976,7 +976,7 @@ $("#diAPILoginForm").submit(function(e){
                 if (currentUserDetails.viewnode_authorized || currentUserDetails.modifynode_authorized){
                     getValidNodeProperties();
                     $(".ontomanage").show();
-                    $(".ontodisplay").width("65%");
+                    $(".ontodisplay").width("70%");
                     if(currentUserDetails.modifynode_authorized){
       		            changeToModifierUserUI();
                         if (currentUserDetails.doidUpdateAvailable) {

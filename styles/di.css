@@ -6,11 +6,11 @@
 	color: white !important;
 	font-size: 0.8em;
 }
-.ontodisplay, .ontomanage {
+.ontomanage {
 	padding: 5px;
 }
 #term, #tabpanel {
-	width:90% !important;
+	width:99% !important;
 }
 
 
