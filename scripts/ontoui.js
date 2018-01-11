@@ -459,24 +459,39 @@ function downloadAuditTrailBtnPressed(){
 
 function saveNode(){
     var primaryNodeProperties = $("#primaryNodeProperties").jsGrid("option", "data");
-    var requestBodyString="";
+    var requestBody={};
+    var dataToSend = {
+    };
     for (var i=0; i<primaryNodeProperties.length; i++){
+        
+        //propertiesToModify.push(primaryNodeProperties[i]);
+        var keyValue = "";
+        var valueValue ="";
         var primaryNodeProperty = primaryNodeProperties[i];
         for (var key in primaryNodeProperty){
+
             if (key==="Property"){
-                requestBodyString=requestBodyString+primaryNodeProperty[key]+"=";
+                keyValue = primaryNodeProperty[key];
+                //requestBodyString=requestBodyString+primaryNodeProperty[key]+"=";
             }
             else {
-                requestBodyString=requestBodyString+primaryNodeProperty[key]+"&";
+                valueValue = primaryNodeProperty[key];
+                //requestBodyString=requestBodyString+primaryNodeProperty[key]+"&";
             }
         }
+        dataToSend[keyValue]=valueValue;
+        //propertiesToModify.push(dataToSend);
     }
-    requestBodyString=requestBodyString+"iri="+$("#primaryiriannunciator").html().substring(15)+"&";
-    requestBodyString=requestBodyString+"nodetype="+$('#nodeTypeSelectionDropdown option:selected').text();
+    requestBody.propertiesToSave=dataToSend;
+    requestBody.iri=$("#primaryiriannunciator").html().substring(15);
+    requestBody.nodetype=$('#nodeTypeSelectionDropdown option:selected').text();
+    console.log(requestBody);
+    //requestBodyString=requestBodyString+"iri="+$("#primaryiriannunciator").html().substring(15)+"&";
+    //requestBodyString=requestBodyString+"nodetype="+$('#nodeTypeSelectionDropdown option:selected').text();
     $.ajax({
         url: apiServer+'/DIOntoManager/api/neo4j/node/modify',
         type: 'POST',
-        data: requestBodyString,
+        data: JSON.stringify(requestBody),
         xhrFields: {
             withCredentials: true
         },
@@ -494,7 +509,7 @@ function saveNode(){
             //alert(err.Message);
         }
     })
-    console.log(requestBodyString);
+    //console.log(requestBodyString);
 }
 
 function saveNewNode(){
