@@ -124,6 +124,151 @@ $(document).ready(function() {
 					
 					
 /*LENA*/					
+
+    (function (jsGrid, $, undefined) {
+        var NumberField = jsGrid.NumberField;
+        var numberValueType = "number";
+        var stringValueType = "string";
+        function Select2Field(config) {
+           // debugger;
+            this.items = [];
+            this.selectedIndex = -1;
+            this.valueField = "";
+            this.textField = "";
+           
+            if (config.valueField && config.items.length)
+                this.valueType = typeof config.items[0][config.valueField];
+            this.sorter = this.valueType;
+            NumberField.call(this, config);
+        }
+
+        Select2Field.prototype = new jsGrid.Field({
+            align: "left",
+            valueType: numberValueType,
+
+            itemTemplate: function (value) {
+               // debugger;
+                var items = this.items,
+                    valueField = this.valueField,
+                    textField = this.textField,
+                    resultItem;
+
+                if (valueField) {
+                    resultItem = $.grep(items, function (item, index) {
+                        return item[valueField] === value;
+                    })[0] || {};
+                }
+                else
+                    resultItem = items[value];
+
+                var result = (textField ? resultItem[textField] : resultItem);
+                return (result === undefined || result === null) ? "" : result;
+            },
+
+            filterTemplate: function () {
+                if (!this.filtering)
+                    return "";
+
+                var grid = this._grid,
+                    $result = this.filterControl = this._createSelect();
+                this._applySelect($result, this);
+
+                if (this.autosearch) {
+                    $result.on("change", function (e) {
+                        grid.search();
+                    });
+                }
+
+                return $result;
+            },
+
+            insertTemplate: function () {
+               // debugger;
+                if (!this.inserting)
+                    return "";
+
+                var $result = this.insertControl = this._createSelect();
+                this._applySelect($result, this);
+                return $result;
+            },
+
+            editTemplate: function (value) {
+              //  debugger;
+                if (!this.editing)
+                    return this.itemTemplate(value);
+
+                var $result = this.editControl = this._createSelect();
+                (value !== undefined) && $result.val(value);
+                this._applySelect($result, this);
+                return $result;
+            },
+
+            filterValue: function () {
+              //  debugger;
+                var val = this.filterControl.val();
+                return this.valueType === numberValueType ? parseInt(val || 0, 10) : val;
+            },
+
+            insertValue: function () {
+              //  debugger;
+                var val = this.insertControl.val();
+                return this.valueType === numberValueType ? parseInt(val || 0, 10) : val;
+            },
+
+            editValue: function () {
+               // debugger;
+                var val = this.editControl.val();
+                return this.valueType === numberValueType ? parseInt(val || 0, 10) : val;
+            },
+
+            _applySelect: function (item, self) {
+              //  debugger;
+                setTimeout(function () {
+                    var selectSiteIcon = function (opt) {
+                        var img = '';
+                        try {
+                            img = opt.element.attributes.img.value;
+                        } catch (e) { }
+                        if (!opt.id || !img)
+                            return opt.text;
+                        var res = $('<span><img src="' + img + '" class="img-flag"/> ' + opt.text + '</span>');
+                        return res;
+                    }
+                    item.select2({
+                        width: 'resolve',
+                        templateResult: selectSiteIcon,
+                        templateSelection: selectSiteIcon
+                    });
+                });
+            },
+
+            _createSelect: function () {
+               // debugger;
+                var $result = $("<select>"),
+                  valueField = this.valueField,
+                  textField = this.textField,
+                  selectedIndex = this.selectedIndex;
+
+                $.each(this.items, function (index, item) {
+                    var value = valueField ? item[valueField] : index,
+                        text = textField ? item[textField] : item;
+                        
+                    var $option = $("<option>")
+                        .attr("value", value)
+                        .text(text)
+                        .appendTo($result);
+
+                    $option.prop("selected", (selectedIndex === index));
+                });
+
+                return $result;
+            }
+        });
+
+        jsGrid.fields.Select2Field = jsGrid.Select2Field = Select2Field;
+
+    }(jsGrid, jQuery)); 
+
     document.getElementById("term").value=getParameterByName("term");
     $("input[id=neo4jUrl]").val(apiServer + "/DIOntoManager");
     makeCy();

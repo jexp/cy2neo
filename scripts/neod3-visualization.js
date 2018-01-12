@@ -292,7 +292,7 @@ function Neod3Renderer() {
         var inserting = currentUserDetails.modifynode_authorized;
         var editing = currentUserDetails.modifynode_authorized;
         var fields = [
-            { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
+            { name: "Property", type: "Select2Field", items:validNodeProperties, valueField:"Name", textField:"Name"  },
             { name: "Value", type: "text" },
             
         ]
