@@ -267,6 +267,11 @@ $(document).ready(function() {
         });
 
         jsGrid.fields.Select2Field = jsGrid.Select2Field = Select2Field;
+        jsGrid.loadStrategies.DirectLoadingStrategy.prototype.finishInsert = function(insertedItem) {
+            var grid = this._grid;
+            grid.option("data").unshift(insertedItem);
+            grid.refresh();
+        }
 
     }(jsGrid, jQuery)); 
 
