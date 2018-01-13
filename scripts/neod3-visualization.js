@@ -187,6 +187,15 @@ function Neod3Renderer() {
         }
     }
 
+    function checkIfPropertyIsIndexed(property, listOfIndexedProperties){
+        for (i=0; i<listOfIndexedProperties.length; i++){
+            if (listOfIndexedProperties[i].Name === property){
+                return true;
+            }
+        }
+        return false;
+    }
+
     function nodeDblClickedHandler(node){
         hideUserSettings();
         var nodePropData = $.parseJSON(JSON.stringify(node));
@@ -270,6 +279,12 @@ function Neod3Renderer() {
             var nodeProperty = {}
             if (key.toLowerCase()!=="iri" && key.toLowerCase()!=="labels"){
                 nodeProperty["Property"] = key;
+                if (!checkIfPropertyIsIndexed(key, validNodeProperties)){
+                    var newProperty = {
+                        "Name":key
+                    }
+                    validNodeProperties.push(newProperty);
+                }
                 if (nodePropData[key].constructor !== Array){
                     nodeProperty["Value"] = nodePropData[key];
                 }
