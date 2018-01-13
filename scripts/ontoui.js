@@ -235,6 +235,7 @@ $(document).ready(function() {
                         return res;
                     }
                     item.select2({
+                        tags: true,
                         width: 'resolve',
                         templateResult: selectSiteIcon,
                         templateSelection: selectSiteIcon
