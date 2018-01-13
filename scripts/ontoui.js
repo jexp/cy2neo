@@ -162,7 +162,7 @@ $(document).ready(function() {
                     resultItem = items[value];
 
                 var result = (textField ? resultItem[textField] : resultItem);
-                return (result === undefined || result === null) ? "" : result;
+                return (result === undefined || result === null) ? value : result;
             },
 
             filterTemplate: function () {
