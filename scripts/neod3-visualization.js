@@ -82,6 +82,12 @@ function Neod3Renderer() {
                 var subjectNodeProperty = {}
                 if (key.toLowerCase()!=="iri" && key.toLowerCase()!=="labels"){
                     subjectNodeProperty["Property"] = key;
+                    if (!checkIfPropertyIsIndexed(key, validNodeProperties)){
+                        var newProperty = {
+                            "Name":key
+                        }
+                        validNodeProperties.push(newProperty);
+                    }
                     if (subjectNode[key].constructor !== Array){
                         subjectNodeProperty["Value"] = subjectNode[key];
                     }
