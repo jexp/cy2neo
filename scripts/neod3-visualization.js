@@ -193,14 +193,7 @@ function Neod3Renderer() {
         }
     }
 
-    function checkIfPropertyIsIndexed(property, listOfIndexedProperties){
-        for (i=0; i<listOfIndexedProperties.length; i++){
-            if (listOfIndexedProperties[i].Name === property){
-                return true;
-            }
-        }
-        return false;
-    }
+    
 
     function nodeDblClickedHandler(node){
         hideUserSettings();

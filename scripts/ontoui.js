@@ -144,7 +144,7 @@ $(document).ready(function() {
 
         Select2Field.prototype = new jsGrid.Field({
             align: "left",
-            valueType: numberValueType,
+            valueType: stringValueType,
 
             itemTemplate: function (value) {
                // debugger;
@@ -238,7 +238,29 @@ $(document).ready(function() {
                         tags: true,
                         width: 'resolve',
                         templateResult: selectSiteIcon,
-                        templateSelection: selectSiteIcon
+                        templateSelection: selectSiteIcon,
+                        ajax: {
+                            url: apiServer+'/DIOntoManager/api/neo4j/node/properties/get',
+                            type: 'GET',
+                            dataType: 'json',
+                            xhrFields: {
+                              withCredentials: true
+                            },
+                            data: function (params) {
+                               console.log(params);
+                               var query = {
+                                   propertyName: params.term,
+                               }
+                               return query;
+                            },
+                            processResults: function(data, params){
+                                console.log(data);
+                               return {
+                                  results: data
+                               }
+                            }
+                        }
+
                     });
                 });
             },
@@ -261,7 +283,10 @@ $(document).ready(function() {
 
                     $option.prop("selected", (selectedIndex === index));
                 });
-
+                console.log("result is ");
+                console.log($result);
+                console.log("items are ");
+                console.log(this.items);
                 return $result;
             }
         });
@@ -304,7 +329,7 @@ $(document).ready(function() {
             $('#authStatus').html("Welcome " + currentUserDetails.User + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)");
             $('#authStatus').show();
             if (currentUserDetails.viewnode_authorized){
-                getValidNodeProperties();
+                //getValidNodeProperties();
 
                 $(".ontomanage").show();
                 $(".ontodisplay").width("70%");
@@ -491,8 +516,8 @@ function initManageRelationshipControls(){
     $(".primaryNode").show();
 
     $("#relationshipDropdown").select2({
-		    tags: true,
-		    ajax: {
+		tags: true,
+		ajax: {
   		    url: apiServer+'/DIOntoManager/api/neo4j/relationship/find',
   		    type: 'GET',
   		    dataType: 'json',
@@ -893,6 +918,15 @@ function deleteNodeBtnPressed(){
     }
 }
 
+function checkIfPropertyIsIndexed(property, listOfIndexedProperties){
+    for (i=0; i<listOfIndexedProperties.length; i++){
+        if (listOfIndexedProperties[i].Name === property){
+            return true;
+        }
+    }
+    return false;
+}
+
 function createNodeBtnPressed(){
     initializeCreateNodeControls();
     closeAuditTrailBtnPressed();
@@ -908,10 +942,26 @@ function createNodeBtnPressed(){
         paging: false,
 
         data: [],
-        fields: [
-            { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
+        onItemInserted: function(args) {
+           
+           if (!checkIfPropertyIsIndexed(args.item.Property, validNodeProperties)){
+                        var newProperty = {
+                            "Name":args.item.Property
+                        }
+                        validNodeProperties.push(newProperty);
+                    }
+            $("#primaryNodeProperties").jsGrid({
+                fields: [
+            { name: "Property", type: "Select2Field", items:validNodeProperties, valueField:"Name", textField:"Name" },
             { name: "Value", type: "text" },
-            { type: "control", deleteButton: false, width: 50 }
+            { type: "control", deleteButton: true, width: 50 }
+        ]
+            });
+        },
+        fields: [
+            { name: "Property", type: "Select2Field", items:validNodeProperties, valueField:"Name", textField:"Name" },
+            { name: "Value", type: "text" },
+            { type: "control", deleteButton: true, width: 50 }
         ]
     });
 }
@@ -1142,7 +1192,7 @@ $("#diAPILoginForm").submit(function(e){
                 $('#authStatus').html("<font size=\"1\">Welcome " + currentUserDetails.User + " (<span onClick=\"logout()\" id=\"logout\">logout</span>)</font>");
                 $('#authStatus').show();
                 if (currentUserDetails.viewnode_authorized || currentUserDetails.modifynode_authorized){
-                    getValidNodeProperties();
+                   // getValidNodeProperties();
                     $(".ontomanage").show();
                     $(".ontodisplay").width("70%");
                     if(currentUserDetails.modifynode_authorized){
