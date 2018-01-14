@@ -1,74 +1,261 @@
 <html>
-<head>
-<link rel="stylesheet" href="styles/codemirror.css">
-<link rel="stylesheet" href="styles/codemirror-neo.css">
-<link rel="stylesheet" href="styles/cy2neo.css">
-<link rel="stylesheet" href="styles/neod3.css">
-<link rel="stylesheet" href="styles/datatable.css">
-<link rel="stylesheet" href="styles/vendor.css"> <!-- bootstrap-->
-<link rel="stylesheet" href="styles/sweet-alert.css">
-<link rel="stylesheet" href="styles/gh-fork-ribbon.css">
-<title>Cy2NeoD3 - Tiny Neo4j Cypher Workbench</title>
-</head>
-<body>
-  <div>
-  <input class="form-control" type="url" value="http://localhost:7474" id="neo4jUrl"/><br/>
-  <input class="form-control" type="text" size="8" value="neo4j" id="neo4jUser"/>
-  <input class="form-control" type="password" size="8" placeholder="password" value="test" id="neo4jPass"/><br/>
-  <textarea name="cypher" id="cypher" rows="4" cols="120" data-lang="cypher" class="code form-control">
-  MATCH (n)-[r]->(m)
-  RETURN n,r,m
-  LIMIT 50;
-  </textarea>
-  <a href="#" title="Execute" id="execute"><i class="fa fa-play-circle-o"></i></a>
-  </div>
+    <head>
+        <link rel="shortcut icon" href="http://www.ranchobiosciences.com/wp-content/uploads/2016/04/Rancho-map.png" />
+        <link rel="stylesheet" href="styles/codemirror.css">
+        <link rel="stylesheet" href="styles/codemirror-neo.css">
+        <link rel="stylesheet" href="styles/cy2neo.css">
+        <link rel="stylesheet" href="styles/neod3.css">
+        <link rel="stylesheet" href="styles/datatable.css">
+        <link rel="stylesheet" href="styles/vendor.css"> <!-- bootstrap-->
+        <link rel="stylesheet" href="styles/sweet-alert.css">
+        <link rel="stylesheet" href="styles/gh-fork-ribbon.css">
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+        <link rel="stylesheet" href="styles/di.css">
+        <title>Cy2NeoD3 - Tiny Neo4j Cypher Workbench</title>
+    </head>
 
-<div role="tabpanel">
+    <script>
+        //var apiServer="http://ns527777.ip-149-56-18.net:8086";
+        var apiServer="http://10.33.36.143:8081";
+        var validNodeProperties=[];
+        function runScript(e) {
+            if (e.keyCode == 13) {
+                var config = {}
+                var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
+                new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true, false);
+                return false;
+            }
+        }
 
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#graph" aria-controls="home" role="tab" data-toggle="tab">Graph</a></li>
-    <li role="presentation"><a href="#table" aria-controls="table" role="tab" data-toggle="tab">Table</a></li>
-  </ul>
+        function makeCy(){
+            var queryTerm = document.getElementById("term").value;
+            document.getElementById("cypher").value=queryTerm;
+        }
 
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="graph">
-    	<div class="tab-pane active" id="graph">&nbsp;</div>
-    </div>
-    <div role="tabpanel" class="tab-pane" id="table">
-    	<div id="datatable"></div>
-    </div>
-  </div>
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+		
+		function mrgToggle(){
+            $("#merge_magic").toggle();
+            $("#ontodisplay").toggle();
+            $($("#mrg_btn")).val($($("#mrg_btn")).val() === 'Merge new DOID' ? 'Back to Ontology' : 'Merge new DOID');
+        }
+		
+		function addRow(bsvev, doidv, idx){
+        if (!document.getElementsByTagName) return;
+            tabBody=document.getElementsByTagName("tbody").item(0);
+            row=document.createElement("tr");
+            cell1 = document.createElement("td");
+            cell1.setAttribute('id', "tdbsve" + idx);
+            cell2 = document.createElement("td");
+            cell2.setAttribute('id', "tddoid" + idx);
+            cell3 = document.createElement("td");
+            textnode1=document.createTextNode(bsvev);
+            textnode2=document.createTextNode(doidv);
+            select = document.createElement('select');
+            select.setAttribute('id', "selid" + idx);
+            option1 = document.createElement("option");
+            option1.setAttribute('value', "bsve");
+            option1.appendChild(document.createTextNode("BSVE"));
+            select.appendChild(option1);
+            option2 = document.createElement("option");
+            option2.setAttribute('value', "doid");
+            option2.appendChild(document.createTextNode("DOID"));
+            select.appendChild(option2);
+            //option3 = document.createElement("option");
+            //option3.setAttribute('value', "combine");
+            //option3.appendChild(document.createTextNode("Combine"));
+            //select.appendChild(option3);
+            cell1.appendChild(textnode1);
+            cell2.appendChild(textnode2);
+            cell3.appendChild(select)
+            row.appendChild(cell1);
+            row.appendChild(cell2);
+            row.appendChild(cell3);
+            tabBody.appendChild(row);
+        }
+    </script>
+    <body>
+        <div class="authentication" style="background-color: #212831;">
+            <div class="logo" style="padding-top:15px;width:'25%'; float:left;"><a id="dnn_dnnLogo_hypLogo" title="Digital Infuzion - Home Page" href="http://www.digitalinfuzion.com/Home.aspx">
+                <img id="dnn_dnnLogo_imgLogo" src="http://www.digitalinfuzion.com/Portals/0/Logo.png?ver=2015-10-29-163414-967" alt="Digital Infuzion - Home Page" /></a>
+            </div>
+            <div style="float:right;padding-top: 15px; color: white; font-size:0.75em;">
+                <form id="diAPILoginForm" method="post">
+                    Username: &nbsp; <input type="text" name="username" id="diAPIUsername">
+                    Password: &nbsp; <input type="password" name="password" id="diAPIPassword" >
+                    <input type="submit" value="Submit" id="diAPISubmit">
+                </form>
+            </div>
+            <div id="authStatus" style="color:white; float:right;"></div>
+        </div>
 
-  <div class="github-fork-ribbon-wrapper right-bottom">
-      <div class="github-fork-ribbon">
-          <a href="https://github.com/jexp/cy2neo">Fork me on GitHub</a>
-      </div>
-  </div>
+        
 
-</div>
+        <div class="ontomanage" id="ontomanage">
+            
+            <div class="nodeControls" align="right">
+                <form name="nodes" id="nodes">
+                    <input class="createnode" type="button" id="createnodebtn" onclick="createNodeBtnPressed()" value="Create New Node"/>
+                    <input class="showaudittrail" type="button" id="showaudittrail" onclick="showAuditTrailBtnPressed()" value="Audit Trail"/>
+                    <input class="showusersettings" type="button" id="showusersettings" onclick="showUserSettingsBtnPressed()" value="User Settings"/>
+					<input type="button" id="mrg_btn" onclick='mrgToggle();' value="Merge new DOID">
+                </form>
+            </div>
 
-<script src="scripts/codemirror.js"></script>
-<script src="scripts/codemirror-cypher.js"></script>
-<script src="scripts/vendor.js"></script>
-<script src="scripts/sweet-alert.min.js"></script>
-<script src="scripts/neod3.js"></script>
-<script src="scripts/neod3-visualization.js"></script>
-<script src="scripts/neo4d3.js"></script>
-<script src="scripts/cy2neod3.js"></script>
-<script src="scripts/jquery.dataTables.min.js"></script>
-<script src="scripts/cypher.datatable.js"></script>
+            <div class="usersettings">
+                
+                <div class="relationshipVisibilitySettings">
+                </div>
+                <div class="usersettingsbtns">
+                    <input class="saveusersettings" type="button" id="saveusersettings" onclick="saveUserSettingsBtnPressed()" value="Save User Settings"/>
+                    <input class="cancelusersettings" type="button" id="cancelusersettings" onclick="hideUserSettings()" value="Close"/>
+                </div>
+            </div>
+            
+            
+            <div class="primaryNode">
+                <div align="right">
+                    <form>
+                        <input class="savenode" type="button" id="savenode" onclick="saveNode()" value="Save Node"/>
+                        <input class="deletenode" type="button" id="deletenodebtn" onclick="deleteNodeBtnPressed()" value="Delete Node"/>
+                        <input class="savenewnode" type="button" id="savenewnode" onclick="saveNewNode()" value="Save New Node"/>
+                        <input class="mngreltns" type="button" id="mngreltnsbtn" onclick="displayCreateRelationshipControls()" value="Create A Relationship"/>    
+                    </form>
+                </div>
+                <div id="primaryiriannunciator" align="right"></div>
+                <div id="nodeTypeSelection">
+                    <div id="nodeTypeSelectionLabel">
+                        Node Type
+                    </div>
+                    <select id="nodeTypeSelectionDropdown"></select>            
+                </div>
+                <div id="primaryNodeProperties"></div>
+            </div>
 
 
 
-<script type="text/javascript">
-    $(document).ready(function() {
-		//todo dynamic configuration
-		var config = {}
-	    var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
-		new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection , true);
-	});
-</script>
-</body>
+            <div class="relationshipControl">
+                <select id="relationshipDropdown"></select> 
+                <form>
+                    <input class="createrelationship" type="button" id="createrelationship" value="Create Relationship"/>
+                    <input class="modifyrelationship" type="button" id="modifyrelationship" value="Modify relationship"/>
+                    <input class="deleterelationship" type="button" id="deleterelationship" value="Delete relationship"/>
+                    <input class="cancelnewrelations" type="button" id="cancelnewrelations" value="cancel"/>
+                </form>
+            </div>
+            <div class="secondaryNode" align="right">
+                <div id="secondaryiriannunciator"></div>
+                <div id="secondaryNodeProperties"></div>
+
+            </div>
+
+            <div class="auditTrail">
+                <form>
+                    <input class="applyaudittrail" type="button" id="applyaudittrail" onclick="applyAuditTrailBtnPressed()" value="Apply Audit Trail"/>
+                    <input class="closeaudittrail" type="button" id="closeaudittrail" onclick="closeAuditTrailBtnPressed()" value="Close"/>
+                    <input class="downloadaudittrail" type="button" id="downloadaudittrail" onclick="downloadAuditTrailBtnPressed()" value="Download Last Audit Trail Replay Log"/>
+                </form>
+                <div id="audittrailgrid" style="height: 100%; width:100%" class="ag-theme-fresh"></div>
+            </div>
+        </div>  
+
+        <div class="ontodisplay" id="ontodisplay">
+	       Search for:
+            <div>
+                <form>
+                    <input class="form-control" type="hidden" value="" id="neo4jUrl"/>
+                    <input class="form-control" type="hidden" size="8" value="neo4j" id="neo4jUser"/>
+                    <input class="form-control" type="hidden" size="8" placeholder="password" value="test" id="neo4jPass"/>
+
+                    <textarea name="cypher" id="cypher" rows="4" cols="120" data-lang="cypher" class="code form-control"></textarea>
+
+                    <input class="form-control" type="text" name="term" id="term" size="60" onkeypress="makeCy();return runScript(event);" onKeyUp="makeCy();">
+                    <a href="#" title="Execute" id="execute" style="display:none"><i class="fa fa-play-circle-o"></i></a>
+                </form>
+            </div>
+
+            <div id="tabpanel" role="tabpanel">
+
+                <form action="">
+                    <div id="authenticatedSearchOptions" style="float:right; padding-left:5px;font-size:0.9em;"> 
+                        <input type="radio" name="searchmethod" value="iriSearch" > Search by IRI
+                        <input type="radio" name="searchmethod" value="BSVEIRISearch" > Search by BSVE IRI (Use * to get all BSVE Nodes)
+                    </div>
+                    <div style="float:right; padding-left:5px; font-size:0.9em;">
+
+                        <input type="radio" name="searchmethod" value="labelSearch" checked="checked"> Search by Label
+                        <input type="radio" name="searchmethod" value="bsveSearch" >BSVE Search &nbsp;
+                    </div>	
+                    <div id="showAllRelationshipsOption">
+                        <input type="checkbox" name="showallrelationships" value="true"> Show All Relationships<br> 
+                    </div>
+
+                </form>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#graph" aria-controls="home" role="tab" data-toggle="tab">Graph</a></li>
+                    <li role="presentation"><a href="#table" aria-controls="table" role="tab" data-toggle="tab">Table</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="graph">
+                        <div class="tab-pane active" id="graph">&nbsp;</div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="table">
+                        <div id="datatable"></div>
+                    </div>
+                </div>  
+            </div>
+	
+            <script src="scripts/codemirror.js"></script>
+            <script src="scripts/codemirror-cypher.js"></script>
+            <script src="scripts/vendor.js"></script>
+            <script src="scripts/sweet-alert.min.js"></script>
+            <script src="scripts/neod3.js"></script>
+            <script src="scripts/neod3-visualization.js"></script>
+            <script src="scripts/neo4d3.js"></script>
+            <script src="scripts/cy2neod3.js"></script>
+            <script src="scripts/jquery.dataTables.min.js"></script>
+            <script src="scripts/cypher.datatable.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/14.2.0/ag-grid.min.js"></script>
+			<script src="scripts/ontoui.js"></script>
+			
+            <div id="syn" style="display:none; background-color:rgba(250, 250, 250, 0.9);" onClick="this.style='display:none;'"> </div>
+			</div>
+			<div id="merge_magic" style="display:none; width:70%">
+			<h3>DOID Ontology Update Tool</h3>
+			<div>
+				<span id="recordsnum"></span>
+				<input type="submit" value="View Conflicts" id="btnSubmit"/>
+				<br>
+				<div id="tablediv">
+					<table class="table table-striped" cellspacing="0" id="difftable" border="1">
+					<tbody>
+					<tr>
+						<th scope="col">Current BSVE Ontology</th><th scope="col">New DOID Ontology</th><th scope="col">Resolve As...</th>
+					</tr>
+					</tbody>
+					</table>
+				</div>
+				<div class="form-group" style="padding:7px;">
+					<button type="submit" name="btnMerge" disabled="true" id="btnMerge">Merge</button>
+				</div>
+				<div><span id="mergestatus"></span></div>
+			</div>
+		</div>
+        <div style="position:absolute; bottom: 10px; padding:10px; font-size:0.5em;" width="100%" align="right">powered by <a href="http://www.ranchobiosciences.com"><img src="http://www.ranchobiosciences.com/wp-content/uploads/2016/01/Rancho.png" height="25" alt="Rancho BioSciences"></a></div>
+    </body>
 </html>

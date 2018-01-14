@@ -1,5 +1,10 @@
 function Neod3Renderer() {
-
+    var mouseXpos;
+    var mouseYpos;
+    onclick = function(e){
+        mouseXpos = e.clientX;
+        mouseYpos = e.clientY;
+    }
     var styleContents =
         "node {\
           diameter: 40px;\
@@ -8,7 +13,7 @@ function Neod3Renderer() {
           border-width: 2px;\
           text-color-internal: #000000;\
           text-color-external: #000000;\
-          caption: '{name}';\
+          caption: '{label}';\
           font-size: 12px;\
         }\
         relationship {\
@@ -20,8 +25,8 @@ function Neod3Renderer() {
           text-color-internal: #FFFFFF;\
         }\n";
 
-    var skip = ["id", "start", "end", "source", "target", "labels", "type", "selected","properties"];
-    var prio_props = ["name", "title", "tag", "username", "lastname","caption"];
+    var skip = ["id", "start", "end", "source", "target", "type", "selected","properties"];
+    var prio_props = ["label","rdflabel",  "comment", "iri", "name", "title", "tag", "username", "lastname","caption"];
 
     var serializer = null;
 
@@ -43,11 +48,339 @@ function Neod3Renderer() {
     var existingStyles = {};
     var currentColor = 1;
 
+    function placeDiv(x, y, syn) {
+        var d = document.getElementById('syn');
+        if (syn !=='') { 
+            d.style.position = "absolute";
+            d.style.left = x+'px';
+            d.style.top = y+'px';
+            d.style.display = 'block';
+            d.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            //d.style.width='250px';
+            d.style.font='10px Georgia, Arial';
+            d.style.border="thin solid #AAAAAA";
+            d.style.padding ="2px 2px 2px 2px";
+            d.style.boxShadow = "2px 2px 2px #999999";
+            d.innerHTML = syn;
+        } else {
+            d.style='display:none;';
+        }
+    }
+
+    function relationshipClickedHandler(relationship){
+        if (currentUserDetails.modifynode_authorized){
+            closeAuditTrailBtnPressed();
+            hideUserSettings();
+            var subjectNode = relationship.source.propertyMap;
+            relationshipIRI = relationship.type;
+            var objectNode = relationship.target.propertyMap;
+            var subjectNodePropertiesTable = [];
+            var objectNodePropertiesTable = [];
+            var subjectiri = "";
+            var objectiri = "";
+            for (var key in subjectNode){
+                var subjectNodeProperty = {}
+                if (key.toLowerCase()!=="iri" && key.toLowerCase()!=="labels"){
+                    subjectNodeProperty["Property"] = key;
+                    if (!checkIfPropertyIsIndexed(key, validNodeProperties)){
+                        var newProperty = {
+                            "Name":key
+                        }
+                        validNodeProperties.push(newProperty);
+                    }
+                    if (subjectNode[key].constructor !== Array){
+                        subjectNodeProperty["Value"] = subjectNode[key];
+                    }
+                    else {
+                        for (var i = 0; i < subjectNode[key].length; i++){
+                            if (i==0){
+                                subjectNodeProperty["Value"] = subjectNode[key][i];
+                            }
+                            else{
+                                subjectNodeProperty["Value"] = subjectNodeProperty["Value"] + "<br>" +subjectNode[key][i];
+                            }
+                        }
+                    }
+                    subjectNodePropertiesTable.push(subjectNodeProperty);
+                }
+                else if(key.toLowerCase()==="iri") {
+                    subjectiri=subjectNode[key];
+                }
+            }
+
+            for (var key in objectNode){
+                var objectNodeProperty = {}
+                if (key.toLowerCase()!=="iri" && key.toLowerCase()!=="labels"){
+                    objectNodeProperty["Property"] = key;
+                    if (objectNode[key].constructor !== Array){
+                        objectNodeProperty["Value"] = objectNode[key];
+                    }
+                    else {
+                        for (var i = 0; i < objectNode[key].length; i++){
+                            if (i==0){
+                                objectNodeProperty["Value"] = objectNode[key][i];
+                            }
+                            else{
+                                objectNodeProperty["Value"] = objectNodeProperty["Value"] + "<br>" +objectNode[key][i];
+                            }
+                        }
+                    }
+                    objectNodePropertiesTable.push(objectNodeProperty);
+                }
+                else if(key.toLowerCase()==="iri"){
+                    objectiri=objectNode[key];
+                }
+            }
+        
+
+
+            $("#primaryNodeProperties").jsGrid({
+                width: "100%",
+                height: "100%",
+
+                inserting: false,
+                editing: false,
+                sorting: false,
+                paging: false,
+
+                data: subjectNodePropertiesTable,
+                fields: [
+                { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name" },
+                { name: "Value", type: "text" },
+                
+                ]
+            });
+            
+            $("#savenode").hide();
+            $("#deletenodebtn").hide();
+            $("#mngreltnsbtn").hide();
+            $("#savenewnode").hide();
+            $("#nodeTypeSelection").hide();
+            $("#relationshipDropdown").empty();
+            $('#relationshipDropdown').append($('<option>', {
+                value: -1,
+                text: relationshipIRI
+            }));
+             //$(".relationshipControl").show();
+            $("#createrelationship").hide();
+            $("#modifyrelationship").show();
+            $("#deleterelationship").show();
+            initManageRelationshipControls(relationshipIRI);
+
+        
+            $("#secondaryNodeProperties").jsGrid({
+                width: "100%",
+                height: "100%",
+
+                inserting: false,
+                editing: false,
+                sorting: false,
+                paging: false,
+
+                data: objectNodePropertiesTable,
+                fields: [
+                    { name: "Property", type: "select", items:validNodeProperties, valueField:"Name", textField:"Name"  },
+                    { name: "Value", type: "text" },
+                
+                ]
+            });
+            $("#secondaryiriannunciator").html("Properties for " +objectiri);
+            $("#secondaryNodeProperties").jsGrid("refresh");
+            $("#primaryiriannunciator").html("Properties for " +subjectiri);
+            $("#primaryNodeProperties").jsGrid("refresh");
+            $(".primaryNode").height('40%');
+            $(".secondaryNode").height('40%');
+        }
+    }
+
+    
+
+    function nodeDblClickedHandler(node){
+        hideUserSettings();
+        var nodePropData = $.parseJSON(JSON.stringify(node));
+        console.log(nodePropData);
+        if (nodePropData.hasOwnProperty("http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel")){
+            document.getElementById("cypher").value = nodePropData["http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel"];
+        }
+        else {
+            document.getElementById("cypher").value = nodePropData["http://www.w3.org/2000/01/rdf-schema#label"];
+        }
+        var config = {}
+        var connection = function() { return {url:$("#neo4jUrl").val(), user:$("#neo4jUser").val(),pass:$("#neo4jPass").val()}; }
+        new Cy2NeoD3(config,"graph","datatable","cypher","execute", connection ,true, true);
+    }
+
+    function nodeClickedHandler(node){
+        hideUserSettings();
+        var resultAssocArray = {};
+        var result = "";
+        //var synonym = $.parseJSON(JSON.stringify(node))["synonym"];
+        //var exactSynonym = $.parseJSON(JSON.stringify(node))["http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"];
+        var nodePropData = $.parseJSON(JSON.stringify(node));
+        console.log(nodePropData);
+        var diBSVEExactSynonym = nodePropData["http://digitalInfuzion.com/ontology/bsve/bsve_do#hasSynonym"];
+        
+        /*if (synonym!=null){
+            if (synonym.constructor === Array) {
+                for (var i = 0; i < synonym.length; i++){
+                    resultAssocArray[synonym[i]]=synonym[i];
+                    
+                }
+
+            }
+            else{
+                resultAssocArray[synonym]=synonym
+                
+            }
+            
+            //alert (synonym);
+        }
+        if (exactSynonym!=null){
+            if (exactSynonym.constructor === Array){
+                for (var i = 0; i < exactSynonym.length; i++){
+                    
+                        resultAssocArray[exactSynonym[i]] = exactSynonym[i];
+                            
+                    
+                }
+            }
+            else {
+                resultAssocArray[exactSynonym] = exactSynonym;
+            }
+            //alert (exactSynonym);
+        }*/
+        if (diBSVEExactSynonym!=null){
+            if (diBSVEExactSynonym.constructor === Array){
+                for (var i = 0; i < diBSVEExactSynonym.length; i++){
+                    resultAssocArray[diBSVEExactSynonym[i]] = diBSVEExactSynonym[i];
+                }
+            }
+            else {
+                resultAssocArray[diBSVEExactSynonym] = diBSVEExactSynonym;
+            }
+            //alert (exactSynonym);
+        }
+        for (var key in resultAssocArray){
+            if (result === "") {
+                result = resultAssocArray [key];
+            }
+            else {
+                result = result + "<br>" + resultAssocArray [key];
+            }
+        }
+        document.getElementById("syn").innerHTML = result;
+        document.getElementById("syn").style = "display:block";
+        placeDiv(mouseXpos, mouseYpos, result);
+
+        var nodePropertiesTable = [];
+        var iri = "";
+        for (var key in nodePropData){
+            var nodeProperty = {}
+            if (key.toLowerCase()!=="iri" && key.toLowerCase()!=="labels"){
+                nodeProperty["Property"] = key;
+                if (!checkIfPropertyIsIndexed(key, validNodeProperties)){
+                    var newProperty = {
+                        "Name":key
+                    }
+                    validNodeProperties.push(newProperty);
+                }
+                if (nodePropData[key].constructor !== Array){
+                    nodeProperty["Value"] = nodePropData[key];
+                }
+                else {
+                    for (var i = 0; i < nodePropData[key].length; i++){
+                        if (i==0){
+                            nodeProperty["Value"] = nodePropData[key][i];
+                        }
+                        else{
+                            nodeProperty["Value"] = nodeProperty["Value"] + "<br>" +nodePropData[key][i];
+                        }
+                    }
+                }
+                nodePropertiesTable.push(nodeProperty);
+            }
+            else if(key.toLowerCase()==="iri"){
+                iri=nodePropData[key];
+            }
+        }
+        var inserting = currentUserDetails.modifynode_authorized;
+        var editing = currentUserDetails.modifynode_authorized;
+        var fields = [
+            { name: "Property", type: "Select2Field", items:validNodeProperties, valueField:"Name", textField:"Name"  },
+            { name: "Value", type: "text" },
+            
+        ]
+        if (currentUserDetails.modifynode_authorized){
+            closeAuditTrailBtnPressed();
+            fields.push({ type: "control", width: 50 });
+        }
+        if (currentUserDetails.modifynode_authorized||currentUserDetails.viewnode_authorized){
+            if ($("#secondaryNodeProperties").is(":visible") && $("#createrelationship").is(":visible")){
+                $("#secondaryNodeProperties").jsGrid({
+                    width: "100%",
+                    height: "100%",
+
+                    inserting: false,
+                    editing: false,
+                    sorting: false,
+                    paging: false,
+
+                    data: nodePropertiesTable,
+                    fields:fields
+                });
+                $("#secondaryiriannunciator").html("Properties for " +iri);
+                $("#secondaryNodeProperties").jsGrid("refresh");
+                $(".primaryNode").height('40%');
+                $(".secondaryNode").height('40%');
+            }
+            else {
+                if(!$("#createrelationship").is(":visible")){
+                    $("#cancelnewrelations").click();
+                }
+                var nodeTypes = nodePropData.labels;
+                $("#nodeTypeSelectionDropdown").empty();
+                if (nodeTypes.length > 0){
+                    $('#nodeTypeSelectionDropdown').append($('<option>', {
+                        value: -1,
+                        text: nodeTypes[0]
+                    }));
+                }
+                $('#nodeTypeSelection').show();
+                initializeCreateNodeControls();
+                $("#primaryNodeProperties").jsGrid({
+                    width: "100%",
+                    height: "100%",
+
+                    inserting: inserting,
+                    editing: editing,
+                    sorting: false,
+                    paging: false,
+
+                    data: nodePropertiesTable,
+                    fields:fields
+                });
+                $("#primaryiriannunciator").html("Properties for " +iri);
+                $("#primaryNodeProperties").jsGrid("refresh");
+
+                $("#savenewnode").hide();
+                $(".primaryNode").show();
+                $(".primaryNode").height('100%');
+                if (currentUserDetails.modifynode_authorized){
+                    $("#savenode").show();
+                    $("#deletenodebtn").show();
+                    $("#mngreltnsbtn").show();
+                }
+            }
+        }
+        
+    }
+
     function dummyFunc() {
     }
 
     function render(id, $container, visualization) {
         function extract_props(pc) {
+            //console.log(pc);
             var p = {};
             for (var key in pc) {
                 if (!pc.hasOwnProperty(key) || skip.indexOf(key) != -1) continue;
@@ -60,7 +393,7 @@ function Neod3Renderer() {
             function label(n) {
                 var labels = n["labels"];
                 if (labels && labels.length) {
-                    return labels[labels.length - 1];
+                    return labels[0];
                 }
                 return "";
             }
@@ -68,6 +401,18 @@ function Neod3Renderer() {
             var style = {};
             for (var i = 0; i < nodes.length; i++) {
                 var props= nodes[i].properties = extract_props(nodes[i]);
+                if (props.hasOwnProperty("http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel")) {
+                    props.label=props["http://digitalInfuzion.com/ontology/bsve/bsve_do#bsveLabel"];
+                }
+                else if (props.hasOwnProperty("http://www.w3.org/2000/01/rdf-schema#label")){
+                    props.label=props["http://www.w3.org/2000/01/rdf-schema#label"];
+                }
+                else if (props.hasOwnProperty("http://www.w3.org/2002/07/owl#deprecated") && props["http://www.w3.org/2002/07/owl#deprecated"]) {
+                    if (props.hasOwnProperty("iri")){
+                        props.label=props.iri;
+                    }
+                }
+                 
                 var keys = Object.keys(props);
                 if (label(nodes[i]) !== "" && keys.length > 0) {
                     var selected_keys = prio_props.filter(function (k) {
@@ -76,9 +421,7 @@ function Neod3Renderer() {
                     selected_keys = selected_keys.concat(keys).concat(['id']);
                     var selector = "node." + label(nodes[i]);
                     var selectedKey = selected_keys[0];
-                    if (typeof(props[selectedKey]) === "string" && props[selectedKey].length > 30) {
-                        props[selectedKey] = props[selectedKey].substring(0,30)+" ...";
-                    }
+                    
                     style[selector] = style[selector] || selectedKey;
                 }
             }
@@ -209,7 +552,7 @@ function Neod3Renderer() {
             .relationships(links);
         var graphView = neo.graphView()
             .style(styleSheet)
-            .width($container.width()).height($container.height()).on('nodeClicked', dummyFunc).on('relationshipClicked', dummyFunc).on('nodeDblClicked', dummyFunc);
+            .width($container.width()).height($container.height()).on('nodeClicked', nodeClickedHandler).on('relationshipClicked', relationshipClickedHandler).on('nodeDblClicked', nodeDblClickedHandler);
         var svg = d3.select("#" + id).append("svg");
         var renderer = svg.data([graphModel]);
         legend(svg,existingStyles);

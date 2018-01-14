@@ -1,29 +1,22 @@
 function Neo(urlSource) {
 	function txUrl() {
 		var connection = urlSource();
-		var url = (connection.url || "http://localhost:7474").replace(/\/db\/data.*/,"");
-		return url + "/db/data/transaction/commit";
+		var url = connection.url;
+		return url + "/api/neo4j/node/diview?term=";
 	}
 	var me = {
 		executeQuery: function(query, params, cb) {
 			var connection = urlSource();
-			var auth = ((connection.user || "") == "") ? "" : "Basic " + btoa(connection.user + ":" + connection.pass);
-			$.ajax(txUrl(), {
-				type: "POST",
-				data: JSON.stringify({
-					statements: [{
-						statement: query,
-						parameters: params || {},
-						resultDataContents: ["row", "graph"]
-					}]
-				}),
+			$.ajax(txUrl()+query, {
+				type: "GET",
+				xhrFields: {
+    				withCredentials: true
+				},
 				contentType: "application/json",
 				error: function(err) {
 					cb(err);
 				},
-				beforeSend: function (xhr) {
-				    if (auth && auth.length) xhr.setRequestHeader ("Authorization", auth);
-				},
+				
 				success: function(res) {
 					if (res.errors.length > 0) {
 						cb(res.errors);
